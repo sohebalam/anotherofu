@@ -47,7 +47,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: [String],
       default: ["user"],
-      enum: ["user", "instructor", "admin"],
+      enum: ["user", "instructor", "admin", "student"],
     },
 
     stripe_account_id: "",

@@ -1,38 +1,24 @@
 import { useEffect } from "react"
 
 import axios from "axios"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { CircularProgress } from "@material-ui/core"
 import { useRouter } from "next/router"
+import { loadUser } from "../../redux/actions/userActions"
 
 const StripeCallback = () => {
   const router = useRouter()
   const profile = useSelector((state) => state.profile)
-  const { loading, error, dbUser } = profile
-
+  const { dbUser } = profile
+  const dispatch = useDispatch()
   useEffect(() => {
     if (dbUser) {
       axios.post("/api/stripe/status").then((res) => {
-        console.log(res)
-
         router.push("/user/instructor/dashboard")
+        dispatch(loadUser())
       })
     }
   }, [dbUser])
-
-  // useEffect(() => {
-  //   if (dbUser) {
-  //     axios.post("/api/instructor/getAccountStatus").then((res) => {
-  //       // console.log(res);
-  //       // dispatch({
-  //       //   type: "LOGIN",
-  //       //   payload: res.data,
-  //       // })
-  //       window.localStorage.setItem("user", JSON.stringify(res.data))
-  //       window.location.href = "/instructor"
-  //     })
-  //   }
-  // }, [dbUser])
 
   return <CircularProgress />
 }

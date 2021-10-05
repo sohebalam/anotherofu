@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { Container } from "@material-ui/core"
 import { regInstructor } from "../../../redux/actions/userActions"
 import { useRouter } from "next/router"
+import { Alert } from "@material-ui/lab"
 
 const New = () => {
   const dispatch = useDispatch()
@@ -43,7 +44,7 @@ const New = () => {
 
   return (
     <>
-      <h1>New </h1>
+      <Typography variant="h3">Become an Instructor</Typography>
 
       {instructorLoading ? (
         <CircularProgress />
@@ -64,6 +65,7 @@ const New = () => {
               Register for Stripe
             </Button>
           </Box>
+          {instructorError && <Alert severity="error">{instructorError}</Alert>}
         </Container>
       )}
     </>

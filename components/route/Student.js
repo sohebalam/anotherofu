@@ -1,29 +1,27 @@
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { useRouter } from "next/router"
 import { SyncOutlined } from "@ant-design/icons"
+import { loadUser } from "../../redux/actions/userActions"
 
 const StudentRoute = ({ children, showNav = true }) => {
   // state
-  const [data, setData] = useState(false)
-  // router
+  const profile = useSelector((state) => state.profile)
+  const { loading, error, dbUser } = profile
+
+  console.log(dbUser)
   const router = useRouter()
 
   useEffect(() => {
-    fetchUser()
-  }, [])
-
-  const fetchUser = async () => {
-    try {
-      const { data } = await axios.get("/api/auth/profile")
-      //   console.log(data);
-      if (data) setData(true)
-    } catch (err) {
-      console.log(err)
-      setData(false)
-      router.push("/login")
+    if (!dbUser) {
+      if (session) {
+        dispatch(loadUser())
+      }
     }
-  }
+
+    if (dbUser && dbUser.role && !dbUser.role.includes("user")) {
+      router.push("/")
+    }
+  }, [dbUser])
 
   return (
     <>

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { loadUser } from "../../redux/actions/userActions"
 import { useSession } from "next-auth/client"
 
-const InstructorRoute = ({ children }) => {
+const InstructorRoute = ({ children, showNav = true }) => {
   const [session] = useSession()
   const profile = useSelector((state) => state.profile)
   const { loading, error, dbUser } = profile
@@ -40,8 +40,7 @@ const InstructorRoute = ({ children }) => {
       ) : (
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-2">{/* <InstructorNav /> */}</div>
-            <div className="col-md-10">{children}</div>
+            <div className="col-md-12">{children}</div>
           </div>
         </div>
       )}

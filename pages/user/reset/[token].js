@@ -85,6 +85,7 @@ const Reset = () => {
     // console.log(userData, token)
     // return
     dispatch(passwordReset(userData, token))
+    router.push("/user/login")
   }
 
   const classes = useStyles()

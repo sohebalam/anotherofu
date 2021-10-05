@@ -57,12 +57,12 @@ export const uploadImage = async (req, res) => {
 
 export const removeImage = async (req, res) => {
   try {
-    const { etag } = req.body
-    // console.log(req.body)
+    const { image } = req.body
+    console.log(req.body)
 
     const params = {
-      Bucket: etag.Bucket,
-      Key: etag.Key,
+      Bucket: image.Bucket,
+      Key: image.Key,
     }
 
     // send remove request to s3
@@ -71,7 +71,7 @@ export const removeImage = async (req, res) => {
         console.log(err)
         return res.status(400)
       }
-      res.send({ ok: true })
+      res.send({ ok: true, image })
     })
   } catch (err) {
     console.log(err)

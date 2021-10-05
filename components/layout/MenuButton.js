@@ -67,7 +67,7 @@ const MenuButton = () => {
             </Link>
 
             <Link href="/">
-              <MenuItem onClick={handleClose}>Bookings</MenuItem>
+              <MenuItem onClick={handleClose}>Courses</MenuItem>
             </Link>
             <Link href="/">
               <MenuItem onClick={handleClose}>Users</MenuItem>
@@ -79,7 +79,7 @@ const MenuButton = () => {
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>
         <Link href="/">
-          <MenuItem onClick={handleClose}>My Bookings</MenuItem>
+          <MenuItem onClick={handleClose}>My Courses</MenuItem>
         </Link>
 
         <Link>

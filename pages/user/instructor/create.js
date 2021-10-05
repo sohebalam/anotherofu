@@ -1,12 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import InstructorRoute from "../../../components/route/Instructor"
 import CourseCreateForm from "../../../components/forms/CourseCreate"
 import Resizer from "react-image-file-resizer"
-// import { toast } from "react-toastify"
 import { useRouter } from "next/router"
-import { CircularProgress } from "@material-ui/core"
-// import user from "../../../../server/models/user"
+import { Box } from "@material-ui/core"
+import {
+  courseCreate,
+  imageDelete,
+  imageUpload,
+} from "../../../redux/actions/lessonActions"
+import { useDispatch, useSelector } from "react-redux"
 
 const CourseCreate = () => {
   // state
@@ -19,9 +23,14 @@ const CourseCreate = () => {
     category: "",
     loading: false,
   })
-  const [image, setImage] = useState({})
   const [preview, setPreview] = useState("")
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image")
+  const dispatch = useDispatch()
+
+  const uploadImage = useSelector((state) => state.uploadImage)
+  const { loading, error, image } = uploadImage
+
+  useEffect(() => {}, [image, uploadImage])
 
   // router
   const router = useRouter()
@@ -54,12 +63,8 @@ const CourseCreate = () => {
           0,
           async (uri) => {
             try {
-              let { data } = await axios.post("/api/course/image", {
-                image: uri,
-              })
-              console.log("IMAGE UPLOADED", data)
-              setImage(data)
-              // setImage(data)
+              dispatch(imageUpload(uri))
+
               setValues({ ...values, loading: false })
             } catch (err) {
               console.log(err)
@@ -76,11 +81,12 @@ const CourseCreate = () => {
 
     // window.confirm("Are you sure you want to delete")
     try {
-      console.log("image", image)
+      // console.log("image", image)
       setValues({ ...values, loading: true })
-      const res = await axios.post("/api/course/delete", { image })
-      setImage({})
-      setPreview("")
+      // const res = await axios.post("/api/course/delete", { image })
+      dispatch(imageDelete(image))
+      // setImage({})
+      // setPreview("")
       setUploadButtonText("Upload Image")
       setValues({ ...values, loading: false })
     } catch (err) {
@@ -92,18 +98,9 @@ const CourseCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    var strNum = values.price
-    strNum = strNum.toString().replace("£", "")
 
-    values.price = parseFloat(strNum)
-    // console.log(values)
     try {
-      console.log(values)
-      const { data } = await axios.post("/api/course/course", {
-        ...values,
-        image,
-      })
-      console.log(data)
+      dispatch(courseCreate(image, values))
       console.log("Great! Now you can start adding lessons")
       router.push("/user/instructor/dashboard")
     } catch (error) {
@@ -113,20 +110,23 @@ const CourseCreate = () => {
 
   return (
     <InstructorRoute>
-      <h1 className="jumbotron text-center square">Create Course</h1>
+      <Box mt="1rem">
+        <h1 className="jumbotron text-center square">Create Course</h1>
 
-      <div className="pt-3 pb-3">
-        <CourseCreateForm
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          values={values}
-          setValues={setValues}
-          preview={preview}
-          uploadButtonText={uploadButtonText}
-          handleImageRemove={handleImageRemove}
-          onDropzoneAreaChange={onDropzoneAreaChange}
-        />
-      </div>
+        <div className="pt-3 pb-3">
+          <CourseCreateForm
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            values={values}
+            setValues={setValues}
+            preview={preview}
+            uploadButtonText={uploadButtonText}
+            loading={loading}
+            handleImageRemove={handleImageRemove}
+            onDropzoneAreaChange={onDropzoneAreaChange}
+          />
+        </div>
+      </Box>
     </InstructorRoute>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import UpdateCourse from "../../../../../components/forms/UpdateCourse"
 import Resizer from "react-image-file-resizer"
 import axios from "axios"
@@ -31,6 +31,8 @@ import DraggableList from "react-draggable-lists"
 import UpdateLessonForm from "../../../../../components/forms/UpdateLesson"
 // import { ListItem, List } from "@material-ui/core"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd-next"
+import { imageDelete } from "../../../../../redux/actions/lessonActions"
+import { useDispatch, useSelector } from "react-redux"
 
 const { Item } = List
 
@@ -62,22 +64,14 @@ const EditCourse = () => {
     lessons: [],
   })
 
-  // const initial = values.lessons
-
-  // console.log("initial", initial)
-
-  // const [datas, setDatas] = useState(initial)
-
-  // console.log(values.lessons, datas)
-
   const [course, setCourse] = useState({})
   const [current, setCurrent] = useState({})
   const [visible, setVisible] = useState(false)
   const [uploadVideoButtonText, setUploadVideoButtonText] =
     useState("Upload Video")
-  const [image, setImage] = useState("")
+  // const [image, setImage] = useState("")
   const [uploadButtonText, setUploadButtonText] = useState("Upload Video")
-
+  const dispatch = useDispatch()
   const [progress, setProgress] = useState(0)
   const [uploading, setUploading] = useState(false)
 
@@ -133,12 +127,13 @@ const EditCourse = () => {
     try {
       // console.log(values);
       setValues({ ...values, loading: true })
-      const { data } = await axios.post(
-        `/api/course/video/remove/${instructorId}`,
-        values.video
-      )
-      setImage({})
-      setPreview("")
+      // const { data } = await axios.post(
+      //   `/api/course/video/remove/${instructorId}`,
+      //   values.video
+      // )
+      dispatch(imageDelete(values.image))
+      // setImage({})
+      // setPreview("")
       setUploadButtonText("Upload Image")
       setValues({ ...values, loading: false })
     } catch (err) {
@@ -207,7 +202,7 @@ const EditCourse = () => {
                 image: uri,
               })
               // console.log("IMAGE UPLOADED", data)
-              setImage(data)
+              // setImage(data)
               // setImage(data)
               setValues({ ...values, loading: false })
             } catch (err) {

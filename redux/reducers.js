@@ -1,5 +1,10 @@
 import { combineReducers } from "redux"
-import { selectVideoReducer } from "./reducers/lessonReducers"
+import {
+  createCourseReducer,
+  deleteImageReducer,
+  selectVideoReducer,
+  uploadImageReducer,
+} from "./reducers/lessonReducers"
 import {
   forgotPasswordReducer,
   newInstructorReducer,
@@ -22,6 +27,9 @@ const reducer = combineReducers({
 
   //lessons
   selectVideo: selectVideoReducer,
+  createCourse: createCourseReducer,
+  uploadImage: uploadImageReducer,
+  deleteImage: deleteImageReducer,
 })
 
 export default reducer

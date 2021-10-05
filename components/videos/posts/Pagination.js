@@ -23,8 +23,8 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     <nav>
       <ul className="pagination">
         {pageNumbers.map((number) => (
-          <Box style={{ padding: "0.25rem" }}>
-            <li key={number}>
+          <Box key={number} style={{ padding: "0.25rem" }}>
+            <li>
               <a className="page-link" onClick={() => paginate(number)}>
                 {number}
               </a>

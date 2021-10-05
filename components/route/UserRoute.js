@@ -2,9 +2,6 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { SyncOutlined } from "@ant-design/icons"
-import UserNav from "../layout/UserNav"
-// import UserNav from "../nav/UserNav"
-
 const UserRoute = ({ children, showNav = true }) => {
   // state
   const [data, setData] = useState(false)
@@ -38,8 +35,7 @@ const UserRoute = ({ children, showNav = true }) => {
       ) : (
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-2">{showNav && <UserNav />}</div>
-            <div className="col-md-10">{children}</div>
+            <div className="col-md-12">{children}</div>
           </div>
         </div>
       )}

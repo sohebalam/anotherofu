@@ -42,7 +42,7 @@ const Index = ({ data }) => {
     <Grid
       container
       justifyContent="center"
-      style={{ marginBottom: "10rem", marginTop: "0.75rem" }}
+      style={{ marginBottom: "12rem", marginTop: "0.75rem" }}
     >
       <Grid item xs={12}>
         <Grid container>

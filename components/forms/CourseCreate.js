@@ -58,7 +58,7 @@ const CourseCreate = ({
   setFiles,
   setValues,
   handleImage,
-  uploadButtonText,
+  loading,
   preview,
   onDropzoneAreaChange,
   handleImageRemove,
@@ -69,13 +69,6 @@ const CourseCreate = ({
   }
 
   const classes = useStyles()
-
-  // const onChange = async (e) => {
-  //   e.preventDefault()
-
-  //   // console.log(e.target.value)
-  //   setValues({ ...values, price: e.target.value })
-  // }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -182,7 +175,7 @@ const CourseCreate = ({
             color="primary"
             className={classes.submit}
           >
-            {values.loading ? "Saving..." : "Save & Continue"}
+            {loading ? "Saving..." : "Save & Continue"}
           </Button>
           {values.loading && <CircularProgress />}
           <Grid container>

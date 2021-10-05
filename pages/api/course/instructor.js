@@ -3,12 +3,12 @@ import connectDB from "../../../connectDB"
 import { instructorCourses } from "../../../controllers/courseCont"
 
 import onError from "../../../middlewares/errors"
-import { isAuthenticated } from "../../../middlewares/auth"
+import { isAuthenticated, isInstructor } from "../../../middlewares/auth"
 
 const router = nc({ onError })
 
 connectDB()
 
-router.use(isAuthenticated).get(instructorCourses)
+router.use(isAuthenticated, isInstructor).get(instructorCourses)
 
 export default router

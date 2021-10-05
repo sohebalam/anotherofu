@@ -5,34 +5,13 @@ import { Avatar, Grid, Tooltip, Typography } from "@material-ui/core"
 import Link from "next/link"
 import { CheckCircleOutlined } from "@material-ui/icons"
 import CancelIcon from "@material-ui/icons/Cancel"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { wrapper } from "../../../redux/store"
 import { loadCourses } from "../../../redux/actions/lessonActions"
 import { getSession } from "next-auth/client"
 const InstructorIndex = () => {
-  const dispatch = useDispatch()
-
   const coursesLoad = useSelector((state) => state.coursesLoad)
   const { loading, error, courses } = coursesLoad
-
-  const profile = useSelector((state) => state.profile)
-
-  const { dbUser } = profile
-
-  console.log(dbUser)
-
-  // const [courses, setCourses] = useState([])
-
-  // useEffect(() => {
-  //   loadCourses()
-  // }, [])
-
-  // const loadCourses = async () => {
-  //   const { data } = await axios.get("/api/course/instructor")
-  //   setCourses(data)
-  // }
-
-  // console.log(courses)
 
   return (
     <InstructorRoute>

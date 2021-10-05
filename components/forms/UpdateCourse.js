@@ -68,7 +68,7 @@ const UpdateCourse = ({
   const [etag, setEtag] = useState({})
   const [preview, setPreview] = useState("")
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image")
-  const [urlimage, setUrlimage] = useState()
+  const [urlimage, setUrlimage] = useState("")
   const router = useRouter()
   const { slug } = router.query
 
@@ -91,6 +91,7 @@ const UpdateCourse = ({
     // console.log("price", values.price)
   }
 
+  console.log(urlimage)
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />

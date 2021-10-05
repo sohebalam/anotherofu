@@ -11,7 +11,6 @@ import {
   imageUpload,
 } from "../../../redux/actions/lessonActions"
 import { useDispatch, useSelector } from "react-redux"
-
 const CourseCreate = () => {
   // state
   const [values, setValues] = useState({

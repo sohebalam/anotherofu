@@ -7,6 +7,9 @@ import {
   DELETE_IMAGE_FAIL,
   DELETE_IMAGE_REQUEST,
   DELETE_IMAGE_SUCCESS,
+  LOAD_COURSES_FAIL,
+  LOAD_COURSES_REQUEST,
+  LOAD_COURSES_SUCCESS,
   SELECT_VIDEO_FAIL,
   SELECT_VIDEO_REQUEST,
   SELECT_VIDEO_SUCCESS,
@@ -14,6 +17,7 @@ import {
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
+import absoluteUrl from "next-absolute-url"
 
 export const imageDelete = (image) => async (dispatch) => {
   try {
@@ -100,6 +104,36 @@ export const courseCreate = (image, values) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_COURSE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const loadCourses = (authCookie, req) => async (dispatch) => {
+  try {
+    const { origin } = absoluteUrl(req)
+    dispatch({ type: LOAD_COURSES_REQUEST })
+
+    const config = {
+      headers: {
+        cookie: authCookie,
+      },
+    }
+
+    const { data } = await axios.get(`${origin}/api/course/instructor`, config)
+
+    // console.log(data)
+
+    dispatch({
+      type: LOAD_COURSES_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: LOAD_COURSES_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

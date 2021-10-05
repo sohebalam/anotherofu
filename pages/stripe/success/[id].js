@@ -1,9 +1,9 @@
 import { useEffect } from "react"
-import { SyncOutlined } from "@ant-design/icons"
+// import { SyncOutlined } from "@ant-design/icons"
 import UserRoute from "../../../components/route/UserRoute"
 import { useRouter } from "next/router"
 import axios from "axios"
-import { Grid } from "@material-ui/core"
+import { CircularProgress, Grid } from "@material-ui/core"
 
 const StripeSuccess = () => {
   // router
@@ -27,7 +27,7 @@ const StripeSuccess = () => {
       <Grid>
         <Grid item xs={9} mb="5">
           <div className="d-flex justify-content-center p-5">
-            <SyncOutlined spin className="display-1 text-danger p-5" />
+            <CircularProgress />
           </div>
         </Grid>
         <Grid item xs={3} padding="5"></Grid>

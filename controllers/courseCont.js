@@ -58,7 +58,13 @@ export const uploadImage = async (req, res) => {
 export const removeImage = async (req, res) => {
   try {
     const { image } = req.body
-    console.log(req.body)
+
+    // console.log(req.body)
+
+    const courses = await Course.findOne(image.ETag)
+
+    // console.log(courses)
+    return
 
     const params = {
       Bucket: image.Bucket,
@@ -107,7 +113,7 @@ export const create = async (req, res) => {
 }
 
 export const instructorCourses = async (req, res) => {
-  console.log("instructor", req.method)
+  // console.log(req.method, req.user)
 
   try {
     const courses = await Course.find({ instructor: req.user._id })

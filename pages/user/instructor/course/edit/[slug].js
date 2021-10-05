@@ -307,7 +307,7 @@ const EditCourse = () => {
 
     // setValues({ ...data })
   }
-
+  console.log(values)
   const classes = useStyles()
 
   const childrenToRender = values.lessons.map((item, i) => (

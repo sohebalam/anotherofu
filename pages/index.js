@@ -7,23 +7,18 @@ import axios from "axios"
 import CourseCard from "../components/cards/CourseCard"
 import { Grid, Paper } from "@material-ui/core"
 import { Box } from "@mui/system"
+import { wrapper } from "../redux/store"
+import { publishedCourse } from "../redux/actions/lessonActions"
+import { useSelector } from "react-redux"
 
-const Home = ({ courses }) => {
-  // const [courses, setCourses] = useState([])
+const Home = () => {
+  const coursePublished = useSelector((state) => state.coursePublished)
+  const { loading, error, published } = coursePublished
 
-  // console.log(courses)
-
-  // useEffect(() => {
-  //   const fetchCourses = async () => {
-  //     const { data } = await axios.get(`/api/course/publish/all`)
-  //     setCourses(data)
-  //   }
-  //   fetchCourses()
-  // }, [])
+  const courses = published
 
   return (
     <div>
-      {/* <Box mb="3rem"> */}
       <Paper>
         <Hero
           imgSrc="/home-hero.jpg"
@@ -32,7 +27,6 @@ const Home = ({ courses }) => {
           subtitle="Learn for Free!"
         />
       </Paper>
-      {/* </Box> */}
       <Grid container>
         {courses.map((course) => (
           <Grid item key={course._id} xs={4}>
@@ -46,12 +40,21 @@ const Home = ({ courses }) => {
   )
 }
 
-export async function getServerSideProps() {
-  const { data } = await axios.get(`${process.env.API}/api/course/publish/all`)
+// export async function getServerSideProps() {
+//   const { data } = await axios.get(`${process.env.API}/api/course/publish/all`)
 
-  return {
-    props: { courses: data },
-  }
-}
+//   return {
+//     props: { courses: data },
+//   }
+// }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req }) => {
+      // const session = await getSession({ req })
+
+      await store.dispatch(publishedCourse(req))
+    }
+)
 
 export default Home

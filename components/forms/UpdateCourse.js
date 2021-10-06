@@ -14,9 +14,11 @@ import { makeStyles } from "@material-ui/core"
 import { Button } from "@material-ui/core"
 import { Container } from "@material-ui/core"
 import Image from "next/image"
-import ImageIcon from "@material-ui/icons/Image"
 import axios from "axios"
 import { useRouter } from "next/router"
+import { useSelector, useDispatch } from "react-redux"
+import { loadCourse } from "../../redux/actions/lessonActions"
+import { wrapper } from "../../redux/store"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -72,24 +74,23 @@ const UpdateCourse = ({
   const router = useRouter()
   const { slug } = router.query
 
+  console.log(slug)
+
+  const dispatch = useDispatch()
   // console.log(slug)
 
   const classes = useStyles()
 
+  const courseLoad = useSelector((state) => state.courseLoad)
+  const { loading, error, course } = courseLoad
+
   useEffect(() => {
-    loadCourse()
-  }, [])
-
-  const loadCourse = async () => {
-    const { data } = await axios.get(`/api/course/${slug}`)
-
-    if (data?.image?.Location) {
-      var url = data?.image?.Location
+    setValues(course)
+    if (course?.image?.Location) {
+      var url = course?.image?.Location
       setUrlimage(url)
     }
-    setValues(data)
-    // console.log("price", values.price)
-  }
+  }, [])
 
   console.log(urlimage)
   return (
@@ -222,5 +223,13 @@ const UpdateCourse = ({
     </Container>
   )
 }
+
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async (context) => {
+//     // const { query, req } = context
+//     console.log(context)
+//     // await store.dispatch(loadCourse(req, query.slug))
+//   }
+// )
 
 export default UpdateCourse

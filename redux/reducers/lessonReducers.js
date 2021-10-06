@@ -8,6 +8,12 @@ import {
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
+  LOAD_COURSE_FAIL,
+  LOAD_COURSE_REQUEST,
+  LOAD_COURSE_SUCCESS,
+  PUBLISHED_COURSES_FAIL,
+  PUBLISHED_COURSES_REQUEST,
+  PUBLISHED_COURSES_SUCCESS,
   SELECT_VIDEO_FAIL,
   SELECT_VIDEO_REQUEST,
   SELECT_VIDEO_SUCCESS,
@@ -15,6 +21,38 @@ import {
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
+
+export const courseLoadReducer = (
+  state = { loading: false, course: null },
+  action
+) => {
+  switch (action.type) {
+    case LOAD_COURSE_REQUEST:
+      return { loading: true }
+    case LOAD_COURSE_SUCCESS:
+      return { loading: false, course: action.payload }
+    case LOAD_COURSE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const coursePublishedReducer = (
+  state = { loading: false, published: null },
+  action
+) => {
+  switch (action.type) {
+    case PUBLISHED_COURSES_REQUEST:
+      return { loading: true }
+    case PUBLISHED_COURSES_SUCCESS:
+      return { loading: false, published: action.payload }
+    case PUBLISHED_COURSES_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 
 export const coursesLoadReducer = (
   state = { loading: false, course: null },

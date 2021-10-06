@@ -10,6 +10,12 @@ import {
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
+  LOAD_COURSE_FAIL,
+  LOAD_COURSE_REQUEST,
+  LOAD_COURSE_SUCCESS,
+  PUBLISHED_COURSES_FAIL,
+  PUBLISHED_COURSES_REQUEST,
+  PUBLISHED_COURSES_SUCCESS,
   SELECT_VIDEO_FAIL,
   SELECT_VIDEO_REQUEST,
   SELECT_VIDEO_SUCCESS,
@@ -18,6 +24,58 @@ import {
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
 import absoluteUrl from "next-absolute-url"
+
+export const loadCourse = (authCookie, req, slug) => async (dispatch) => {
+  try {
+    dispatch({ type: LOAD_COURSE_REQUEST })
+
+    const config = {
+      headers: {
+        cookie: authCookie,
+      },
+    }
+
+    const { origin } = absoluteUrl(req)
+
+    const { data } = await axios.get(`${origin}/api/course/${slug}`, config)
+
+    dispatch({
+      type: LOAD_COURSE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: LOAD_COURSE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const publishedCourse = (req) => async (dispatch) => {
+  try {
+    dispatch({ type: PUBLISHED_COURSES_REQUEST })
+
+    const { origin } = absoluteUrl(req)
+
+    const { data } = await axios.get(`${origin}/api/course/publish/all`)
+
+    dispatch({
+      type: PUBLISHED_COURSES_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PUBLISHED_COURSES_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
 
 export const imageDelete = (image) => async (dispatch) => {
   try {

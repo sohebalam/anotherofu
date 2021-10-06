@@ -126,7 +126,8 @@ export const instructorCourses = async (req, res) => {
 }
 
 export const readCourse = async (req, res) => {
-  // console.log(req.method)
+  console.log(req.method)
+
   const { slug } = req.query
   if (req.query) {
     // console.log(req.query)

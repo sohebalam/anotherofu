@@ -31,8 +31,12 @@ import DraggableList from "react-draggable-lists"
 import UpdateLessonForm from "../../../../../components/forms/UpdateLesson"
 // import { ListItem, List } from "@material-ui/core"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd-next"
-import { imageDelete } from "../../../../../redux/actions/lessonActions"
+import {
+  imageDelete,
+  loadCourse,
+} from "../../../../../redux/actions/lessonActions"
 import { useDispatch, useSelector } from "react-redux"
+import { wrapper } from "../../../../../redux/store"
 
 const { Item } = List
 
@@ -411,5 +415,19 @@ const EditCourse = () => {
     </>
   )
 }
+
+// export async function getServerSideProps(context) {
+//   const { params } = context
+
+//   console.log(params)
+// }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { params, req } = context
+    // console.log(context)
+    await store.dispatch(loadCourse(req.headers.cookie, req, params.slug))
+  }
+)
 
 export default EditCourse

@@ -1,5 +1,7 @@
 import { combineReducers } from "redux"
 import {
+  courseLoadReducer,
+  coursePublishedReducer,
   coursesLoadReducer,
   createCourseReducer,
   deleteImageReducer,
@@ -32,6 +34,8 @@ const reducer = combineReducers({
   uploadImage: uploadImageReducer,
   deleteImage: deleteImageReducer,
   coursesLoad: coursesLoadReducer,
+  coursePublished: coursePublishedReducer,
+  courseLoad: courseLoadReducer,
 })
 
 export default reducer

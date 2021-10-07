@@ -1,12 +1,16 @@
-import axios from "axios"
-
 import {
+  CHECK_ENROLL_FAIL,
+  CHECK_ENROLL_REQUEST,
+  CHECK_ENROLL_SUCCESS,
   CREATE_COURSE_FAIL,
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   DELETE_IMAGE_FAIL,
   DELETE_IMAGE_REQUEST,
   DELETE_IMAGE_SUCCESS,
+  FREE_ENROLL_FAIL,
+  FREE_ENROLL_REQUEST,
+  FREE_ENROLL_SUCCESS,
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
@@ -31,6 +35,84 @@ import {
 } from "../constants/lessonTypes"
 import absoluteUrl from "next-absolute-url"
 import { loadStripe } from "@stripe/stripe-js"
+
+import axios from "axios"
+
+export const courseEdit = (image, values, slug) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_COURSE_REQUEST })
+
+    // var strNum = values.price
+    // strNum = strNum.toString().replace("£", "")
+    // values.price = parseFloat(strNum)
+
+    const { data } = await axios.put(`/api/course/update/${slug}`, {
+      ...values,
+      image,
+    })
+
+    console.log(data)
+
+    dispatch({
+      type: CREATE_COURSE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: CREATE_COURSE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const freeEnroll = (course) => async (dispatch) => {
+  try {
+    dispatch({ type: FREE_ENROLL_REQUEST })
+
+    const { data } = await axios.post(
+      `/api/course/enrollment/free/${course._id}`
+    )
+
+    dispatch({
+      type: FREE_ENROLL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: FREE_ENROLL_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const checkEnrollment = (course) => async (dispatch) => {
+  try {
+    dispatch({ type: CHECK_ENROLL_REQUEST })
+
+    const { data } = await axios.get(
+      `/api/course/enrollment/check/${course._id}`
+    )
+
+    dispatch({
+      type: CHECK_ENROLL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: CHECK_ENROLL_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
 
 export const paidEnroll = (course) => async (dispatch) => {
   try {

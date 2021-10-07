@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core"
 import Image from "next/image"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import { useSelector } from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,8 +40,6 @@ const SingleCourseJumbotron = ({
   user,
   handelPaidEnroll,
   handelFreeEnroll,
-  enrolled,
-  setEnrolled,
 }) => {
   const {
     title,
@@ -53,6 +52,9 @@ const SingleCourseJumbotron = ({
     paid,
     category,
   } = course
+
+  const enrollmentCheck = useSelector((state) => state.enrollmentCheck)
+  const { loading: enrollLoad, error: enrollError, enrolled } = enrollmentCheck
 
   const classes = useStyles()
   return (
@@ -134,7 +136,7 @@ const SingleCourseJumbotron = ({
               >
                 <CheckCircleOutlineIcon style={{ marginRight: "0.5rem" }} />
                 {user
-                  ? enrolled.status
+                  ? enrolled?.status
                     ? "Go to course"
                     : "Enroll"
                   : "Login to Enroll"}

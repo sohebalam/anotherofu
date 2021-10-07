@@ -61,7 +61,7 @@ const InstructorIndex = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req }) => {
-      const session = await getSession({ req })
+      // const session = await getSession({ req })
 
       await store.dispatch(loadCourses(req.headers.cookie, req))
     }

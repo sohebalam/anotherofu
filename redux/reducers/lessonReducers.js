@@ -1,10 +1,16 @@
 import {
+  CHECK_ENROLL_FAIL,
+  CHECK_ENROLL_REQUEST,
+  CHECK_ENROLL_SUCCESS,
   CREATE_COURSE_FAIL,
   CREATE_COURSE_REQUEST,
   CREATE_COURSE_SUCCESS,
   DELETE_IMAGE_FAIL,
   DELETE_IMAGE_REQUEST,
   DELETE_IMAGE_SUCCESS,
+  EDIT_COURSE_FAIL,
+  EDIT_COURSE_REQUEST,
+  EDIT_COURSE_SUCCESS,
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
@@ -27,6 +33,54 @@ import {
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
+
+export const courseEditReducer = (
+  state = { loading: false, course: null },
+  action
+) => {
+  switch (action.type) {
+    case EDIT_COURSE_REQUEST:
+      return { loading: true }
+    case EDIT_COURSE_SUCCESS:
+      return { loading: false, course: action.payload }
+    case EDIT_COURSE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const freeEnrollReducer = (
+  state = { loading: false, free: null },
+  action
+) => {
+  switch (action.type) {
+    case PAID_ENROLL_REQUEST:
+      return { loading: true }
+    case PAID_ENROLL_SUCCESS:
+      return { loading: false, free: action.payload }
+    case PAID_ENROLL_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const enrollmentCheckReducer = (
+  state = { loading: false, enrollment: false },
+  action
+) => {
+  switch (action.type) {
+    case CHECK_ENROLL_REQUEST:
+      return { loading: true }
+    case CHECK_ENROLL_SUCCESS:
+      return { loading: false, enrolled: action.payload }
+    case CHECK_ENROLL_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 
 export const paidEnrollReducer = (
   state = { loading: false, paid: null },

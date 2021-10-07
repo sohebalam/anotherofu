@@ -8,7 +8,12 @@ import { useRouter } from "next/router"
 // import { toast } from "react-toastify"
 import { loadStripe } from "@stripe/stripe-js"
 import { useSelector, useDispatch } from "react-redux"
-import { getSingleCourse, paidEnroll } from "../../redux/actions/lessonActions"
+import {
+  checkEnrollment,
+  freeEnroll,
+  getSingleCourse,
+  paidEnroll,
+} from "../../redux/actions/lessonActions"
 import { wrapper } from "../../redux/store"
 import { CircularProgress } from "@mui/material"
 
@@ -16,7 +21,7 @@ const Course = () => {
   const [showModal, setShowModal] = useState(false)
   const [preview, setPreview] = useState("")
   // const [loading, setLoading] = useState(false)
-  const [enrolled, setEnrolled] = useState({})
+  // const [enrolled, setEnrolled] = useState({})
   const router = useRouter()
 
   const dispatch = useDispatch()
@@ -26,6 +31,9 @@ const Course = () => {
 
   const singleCourse = useSelector((state) => state.singleCourse)
   const { loading, error: courseError, course } = singleCourse
+
+  const enrollmentCheck = useSelector((state) => state.enrollmentCheck)
+  const { loading: enrollLoad, error: enrollError, enrolled } = enrollmentCheck
 
   const user = dbUser
 
@@ -39,11 +47,6 @@ const Course = () => {
       }
 
       dispatch(paidEnroll(course))
-      // const { data } = await axios.post(
-      //   `/api/course/enrollment/paid/${course._id}`
-      // )
-      // const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
-      // stripe.redirectToCheckout({ sessionId: data })
     } catch (error) {
       // toast("Enrollment failed please try again")
       console.log(error)
@@ -54,17 +57,19 @@ const Course = () => {
 
     try {
       if (!user) {
-        router.push("/login")
+        router.push("/user/login")
       }
       if (enrolled.status) {
         return router.push(`/user/course/${enrolled.course.slug}`)
       }
 
-      const { data } = await axios.post(
-        `/api/course/enrollment/free/${course._id}`
-      )
+      dispatch(freeEnroll(course))
+
+      // const { data } = await axios.post(
+      //   `/api/course/enrollment/free/${course._id}`
+      // )
       // toast(data.message)
-      return router.push(`/user/course/${data.course.slug}`)
+      return router.push(`/user/course/${course.slug}`)
     } catch (error) {
       // toast("Enrollment failed, try again4")
       console.log(error)
@@ -72,16 +77,8 @@ const Course = () => {
   }
 
   useEffect(() => {
-    if (user && course) checkEnrollment()
-  }, [user, course, enrolled.status])
-
-  const checkEnrollment = async () => {
-    const { data } = await axios.get(
-      `/api/course/enrollment/check/${course._id}`
-    )
-    console.log("enroll", data)
-    setEnrolled(data)
-  }
+    if (user && course) dispatch(checkEnrollment(course))
+  }, [user, course])
 
   return (
     <>
@@ -96,7 +93,7 @@ const Course = () => {
         handelPaidEnroll={handelPaidEnroll}
         handelFreeEnroll={handelFreeEnroll}
         enrolled={enrolled}
-        setEnrolled={setEnrolled}
+        // setEnrolled={setEnrolled}
       />
 
       <PreviewModal

@@ -1,10 +1,13 @@
 import { combineReducers } from "redux"
 import {
+  courseEditReducer,
   courseLoadReducer,
   coursePublishedReducer,
   coursesLoadReducer,
   createCourseReducer,
   deleteImageReducer,
+  enrollmentCheckReducer,
+  freeEnrollReducer,
   paidEnrollReducer,
   selectVideoReducer,
   singleCourseReducer,
@@ -40,6 +43,9 @@ const reducer = combineReducers({
   courseLoad: courseLoadReducer,
   singleCourse: singleCourseReducer,
   paidEnroll: paidEnrollReducer,
+  enrollmentCheck: enrollmentCheckReducer,
+  freeEnroll: freeEnrollReducer,
+  courseEdit: courseEditReducer,
 })
 
 export default reducer

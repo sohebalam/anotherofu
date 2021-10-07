@@ -32,7 +32,9 @@ import UpdateLessonForm from "../../../../../components/forms/UpdateLesson"
 // import { ListItem, List } from "@material-ui/core"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd-next"
 import {
+  courseEdit,
   imageDelete,
+  imageUpload,
   loadCourse,
 } from "../../../../../redux/actions/lessonActions"
 import { useDispatch, useSelector } from "react-redux"
@@ -73,7 +75,7 @@ const EditCourse = () => {
   const [visible, setVisible] = useState(false)
   const [uploadVideoButtonText, setUploadVideoButtonText] =
     useState("Upload Video")
-  // const [image, setImage] = useState("")
+  const [image, setImage] = useState("")
   const [uploadButtonText, setUploadButtonText] = useState("Upload Video")
   const dispatch = useDispatch()
   const [progress, setProgress] = useState(0)
@@ -86,24 +88,6 @@ const EditCourse = () => {
 
   const { slug } = router.query
 
-  const onDragEnd = (result, provided) => {
-    if (!result) {
-      return
-    }
-    const { destination, source } = result
-
-    if (destination.index === source.index) {
-      return
-    }
-    setDatas((prev) => {
-      const sourceData = datas[source.index]
-      let newDatas = prev
-      newDatas.splice(source.index, 1)
-      newDatas.splice(destination.index, 0, sourceData)
-      return newDatas
-    })
-  }
-
   const handleImage = (e) => {
     let file = e.target.files[0]
     setPreview(window.URL.createObjectURL(file))
@@ -112,9 +96,10 @@ const EditCourse = () => {
     // resize
     Resizer.imageFileResizer(file, 720, 500, "JPEG", 100, 0, async (uri) => {
       try {
-        let { data } = await axios.post("/api/course/image", {
-          image: uri,
-        })
+        // let { data } = await axios.post("/api/course/image", {
+        //   image: uri,
+        // })
+        dispatch(imageUpload(uri))
         console.log("IMAGE UPLOADED", data)
         // set image in the state
         setImage(data)
@@ -131,13 +116,9 @@ const EditCourse = () => {
     try {
       // console.log(values);
       setValues({ ...values, loading: true })
-      // const { data } = await axios.post(
-      //   `/api/course/video/remove/${instructorId}`,
-      //   values.video
-      // )
+
       dispatch(imageDelete(values.image))
-      // setImage({})
-      // setPreview("")
+
       setUploadButtonText("Upload Image")
       setValues({ ...values, loading: false })
     } catch (err) {
@@ -149,17 +130,18 @@ const EditCourse = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     // console.log(e)
+    console.log(values, image)
     try {
-      // console.log(values)
       var strNum = values.price
       strNum = strNum.toString().replace("£", "")
 
       values.price = parseFloat(strNum)
 
-      const { data } = await axios.put(`/api/course/update/${slug}`, {
-        ...values,
-        image,
-      })
+      // const { data } = await axios.put(`/api/course/update/${slug}`, {
+      //   ...values,
+      //   image,
+      // })
+      dispatch(courseEdit(image, values, slug))
       console.log("here", data)
       // toast("Course updated!")
       // router.push("/instructor");
@@ -193,7 +175,7 @@ const EditCourse = () => {
 
       if (file) {
         setValues({ ...values, loading: true })
-        Resizer.imageFileResizer(
+        Resizer?.imageFileResizer(
           file,
           500,
           300,
@@ -206,7 +188,7 @@ const EditCourse = () => {
                 image: uri,
               })
               // console.log("IMAGE UPLOADED", data)
-              // setImage(data)
+              setImage(data)
               // setImage(data)
               setValues({ ...values, loading: false })
             } catch (err) {
@@ -311,7 +293,7 @@ const EditCourse = () => {
 
     // setValues({ ...data })
   }
-  console.log(values)
+  // console.log(values)
   const classes = useStyles()
 
   const childrenToRender = values.lessons.map((item, i) => (

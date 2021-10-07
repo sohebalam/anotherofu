@@ -61,10 +61,9 @@ export const removeImage = async (req, res) => {
 
     // console.log(req.body)
 
-    const courses = await Course.findOne(image.ETag)
+    // const courses = await Course.findOne(image.ETag)
 
     // console.log(courses)
-    return
 
     const params = {
       Bucket: image.Bucket,
@@ -126,8 +125,6 @@ export const instructorCourses = async (req, res) => {
 }
 
 export const readCourse = async (req, res) => {
-  console.log(req.method)
-
   const { slug } = req.query
   if (req.query) {
     // console.log(req.query)
@@ -406,46 +403,7 @@ export const freeEnrollment = async (req, res) => {
   }
 }
 
-// export const paidEnrollment = async (req, res) => {
-//   try {
-//     const course = await Course.findById(req.query.courseId)
-//       .populate("instructor")
-//       .exec()
-//     if (!course.paid) return
-//     const fee = (course.price * 30) / 100
-
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ["card"],
-//       line_items: [
-//         {
-//           name: course.title,
-//           amount: Math.round(course.price.toFixed(2) * 100),
-//           currency: "gbp",
-//           quantity: 1,
-//         },
-//       ],
-//       payment_intent_data: {
-//         application_fee_amount: Math.round(fee.toFixed(2) * 100),
-//         transfer_data: {
-//           destination: course.instructor.stripe_account_id,
-//         },
-//       },
-//       success_url: `${process.env.STRIPE_SUCCESS_URL}/${course._id}`,
-//       cancel_url: process.env.STRIPE_CANCEL_URL,
-//     })
-//     const userUpdate = await User.findByIdAndUpdate(req.user._id, {
-//       stripeSession: session,
-//     }).exec()
-//     res.send(session.id)
-//   } catch (error) {
-//     console.log("Handle Payment", error)
-//     return res.status(400).send("Enrollment create falied")
-//   }
-// }
-
 export const paidEnrollment = async (req, res) => {
-  console.log(req.method)
-
   try {
     // check if course is free or paid
     const course = await Course.findById(req.query.courseId)
@@ -481,7 +439,7 @@ export const paidEnrollment = async (req, res) => {
       success_url: `${process.env.STRIPE_SUCCESS_URL}/${course._id}`,
       cancel_url: process.env.STRIPE_CANCEL_URL,
     })
-    console.log("SESSION ID => ", session)
+    // console.log("SESSION ID => ", session)
 
     await User.findByIdAndUpdate(req.user._id, {
       stripeSession: session,

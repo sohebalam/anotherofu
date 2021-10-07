@@ -49,30 +49,21 @@ function Header() {
   // console.log("headerd", dbUser)
 
   useEffect(() => {
-    if (session) {
-      const { user } = session
-      // console.log(user)
+    const userData = {
+      id: dbUser?._id,
+      name: dbUser?.name,
+      email: dbUser?.email,
+      password: null,
+    }
 
-      const userData = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        password: null,
-      }
-      // console.log(dbUser)
-      if (!dbUser) {
-        if (user.id) {
-          dispatch(socialReg(userData))
-          // console.log(userData)
-        }
-      }
-    }
     if (!dbUser) {
-      if (session) {
-        dispatch(loadUser())
-      }
+      dispatch(socialReg(userData))
     }
-  }, [session])
+    // }
+    if (!dbUser) {
+      dispatch(loadUser())
+    }
+  }, [dbUser])
 
   const classes = useStyles()
 

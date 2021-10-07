@@ -13,12 +13,8 @@ import { Checkbox } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core"
 import { Button } from "@material-ui/core"
 import { Container } from "@material-ui/core"
-import Image from "next/image"
-import axios from "axios"
 import { useRouter } from "next/router"
 import { useSelector, useDispatch } from "react-redux"
-import { loadCourse } from "../../redux/actions/lessonActions"
-import { wrapper } from "../../redux/store"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,15 +62,10 @@ const UpdateCourse = ({
     children.push(<option key={i.toFixed(2)}>£{i.toFixed(2)}</option>)
   }
 
-  // const [image, setImage] = useState({})
-  const [etag, setEtag] = useState({})
   const [preview, setPreview] = useState("")
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image")
   const [urlimage, setUrlimage] = useState("")
   const router = useRouter()
-  const { slug } = router.query
-
-  console.log(slug)
 
   const dispatch = useDispatch()
   // console.log(slug)
@@ -207,29 +198,13 @@ const UpdateCourse = ({
           </Button>
           {values.loading && <CircularProgress />}
           <Grid container>
-            <Grid item xs>
-              {/* <Link href="#" variant="body2">
-              Forgot password?
-            </Link> */}
-            </Grid>
-            <Grid item>
-              {/* <Link href="#" variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link> */}
-            </Grid>
+            {/* <Grid item></Grid>
+            <Grid item></Grid> */}
           </Grid>
         </form>
       </div>
     </Container>
   )
 }
-
-// export const getServerSideProps = wrapper.getServerSideProps(
-//   (store) => async (context) => {
-//     // const { query, req } = context
-//     console.log(context)
-//     // await store.dispatch(loadCourse(req, query.slug))
-//   }
-// )
 
 export default UpdateCourse

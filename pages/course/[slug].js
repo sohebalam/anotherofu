@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import PreviewModal from "../../components/modal/PreviewModal"
 import SingleCourseJumbotron from "../../components/cards/CourseJumbotron"
@@ -7,38 +7,46 @@ import { useRouter } from "next/router"
 // import { Context } from "../../context"
 // import { toast } from "react-toastify"
 import { loadStripe } from "@stripe/stripe-js"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { getSingleCourse, paidEnroll } from "../../redux/actions/lessonActions"
+import { wrapper } from "../../redux/store"
+import { CircularProgress } from "@mui/material"
 
-const Course = ({ course }) => {
+const Course = () => {
   const [showModal, setShowModal] = useState(false)
   const [preview, setPreview] = useState("")
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
   const [enrolled, setEnrolled] = useState({})
   const router = useRouter()
 
+  const dispatch = useDispatch()
+
   const profile = useSelector((state) => state.profile)
   const { error, dbUser } = profile
+
+  const singleCourse = useSelector((state) => state.singleCourse)
+  const { loading, error: courseError, course } = singleCourse
 
   const user = dbUser
 
   const handelPaidEnroll = async () => {
     try {
-      setLoading(true)
       if (!user) {
         router.push("/user/login")
       }
       if (enrolled.status) {
         return router.push(`/user/course/${enrolled.course.slug}`)
       }
-      const { data } = await axios.post(
-        `/api/course/enrollment/paid/${course._id}`
-      )
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
-      stripe.redirectToCheckout({ sessionId: data })
+
+      dispatch(paidEnroll(course))
+      // const { data } = await axios.post(
+      //   `/api/course/enrollment/paid/${course._id}`
+      // )
+      // const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
+      // stripe.redirectToCheckout({ sessionId: data })
     } catch (error) {
       // toast("Enrollment failed please try again")
       console.log(error)
-      setLoading(false)
     }
   }
   const handelFreeEnroll = async (e) => {
@@ -52,17 +60,14 @@ const Course = ({ course }) => {
         return router.push(`/user/course/${enrolled.course.slug}`)
       }
 
-      setLoading(true)
       const { data } = await axios.post(
         `/api/course/enrollment/free/${course._id}`
       )
       // toast(data.message)
-      setLoading(false)
       return router.push(`/user/course/${data.course.slug}`)
     } catch (error) {
       // toast("Enrollment failed, try again4")
       console.log(error)
-      setLoading(false)
     }
   }
 
@@ -111,14 +116,12 @@ const Course = ({ course }) => {
   )
 }
 
-export async function getServerSideProps({ query }) {
-  const { data } = await axios.get(
-    `${process.env.API}/api/course/single/${query.slug}`
-  )
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { params, req } = context
 
-  return {
-    props: { course: data },
+    await store.dispatch(getSingleCourse(req, params.slug))
   }
-}
+)
 
 export default Course

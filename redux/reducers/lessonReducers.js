@@ -11,16 +11,54 @@ import {
   LOAD_COURSE_FAIL,
   LOAD_COURSE_REQUEST,
   LOAD_COURSE_SUCCESS,
+  PAID_ENROLL_FAIL,
+  PAID_ENROLL_REQUEST,
+  PAID_ENROLL_SUCCESS,
   PUBLISHED_COURSES_FAIL,
   PUBLISHED_COURSES_REQUEST,
   PUBLISHED_COURSES_SUCCESS,
   SELECT_VIDEO_FAIL,
   SELECT_VIDEO_REQUEST,
   SELECT_VIDEO_SUCCESS,
+  SINGLE_COURSE_FAIL,
+  SINGLE_COURSE_REQUEST,
+  SINGLE_COURSE_SUCCESS,
   UPLOAD_IMAGE_FAIL,
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
+
+export const paidEnrollReducer = (
+  state = { loading: false, paid: null },
+  action
+) => {
+  switch (action.type) {
+    case PAID_ENROLL_REQUEST:
+      return { loading: true }
+    case PAID_ENROLL_SUCCESS:
+      return { loading: false, paid: action.payload }
+    case PAID_ENROLL_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const singleCourseReducer = (
+  state = { loading: false, course: null },
+  action
+) => {
+  switch (action.type) {
+    case SINGLE_COURSE_REQUEST:
+      return { loading: true }
+    case SINGLE_COURSE_SUCCESS:
+      return { loading: false, course: action.payload }
+    case SINGLE_COURSE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 
 export const courseLoadReducer = (
   state = { loading: false, course: null },

@@ -13,17 +13,71 @@ import {
   LOAD_COURSE_FAIL,
   LOAD_COURSE_REQUEST,
   LOAD_COURSE_SUCCESS,
+  PAID_ENROLL_FAIL,
+  PAID_ENROLL_REQUEST,
+  PAID_ENROLL_SUCCESS,
   PUBLISHED_COURSES_FAIL,
   PUBLISHED_COURSES_REQUEST,
   PUBLISHED_COURSES_SUCCESS,
   SELECT_VIDEO_FAIL,
   SELECT_VIDEO_REQUEST,
   SELECT_VIDEO_SUCCESS,
+  SINGLE_COURSE_FAIL,
+  SINGLE_COURSE_REQUEST,
+  SINGLE_COURSE_SUCCESS,
   UPLOAD_IMAGE_FAIL,
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
 import absoluteUrl from "next-absolute-url"
+import { loadStripe } from "@stripe/stripe-js"
+
+export const paidEnroll = (course) => async (dispatch) => {
+  try {
+    dispatch({ type: PAID_ENROLL_REQUEST })
+    const { data } = await axios.post(
+      `/api/course/enrollment/paid/${course._id}`
+    )
+    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY)
+    stripe.redirectToCheckout({ sessionId: data })
+
+    dispatch({
+      type: PAID_ENROLL_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: PAID_ENROLL_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getSingleCourse = (req, slug) => async (dispatch) => {
+  try {
+    dispatch({ type: SINGLE_COURSE_REQUEST })
+
+    const { origin } = absoluteUrl(req)
+
+    const { data } = await axios.get(`${origin}/api/course/single/${slug}`)
+
+    dispatch({
+      type: SINGLE_COURSE_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: SINGLE_COURSE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
 
 export const loadCourse = (authCookie, req, slug) => async (dispatch) => {
   try {

@@ -5,7 +5,9 @@ import {
   coursesLoadReducer,
   createCourseReducer,
   deleteImageReducer,
+  paidEnrollReducer,
   selectVideoReducer,
+  singleCourseReducer,
   uploadImageReducer,
 } from "./reducers/lessonReducers"
 import {
@@ -36,6 +38,8 @@ const reducer = combineReducers({
   coursesLoad: coursesLoadReducer,
   coursePublished: coursePublishedReducer,
   courseLoad: courseLoadReducer,
+  singleCourse: singleCourseReducer,
+  paidEnroll: paidEnrollReducer,
 })
 
 export default reducer

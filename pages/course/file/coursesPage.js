@@ -7,7 +7,7 @@ const CoursesPage = () => {
   return (
     <>
       <Container>
-        <Grid container>
+        <Grid container style={{ marginTop: "0.5rem" }}>
           <Grid item sm={6}>
             <Container component="main" maxWidth="xs">
               <CourseForm />

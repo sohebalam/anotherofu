@@ -9,10 +9,6 @@ import { getFiles } from "../../../../controllers/fileCont"
 
 const router = nc({ onError })
 
-connectDB()
-
-// console.log("here")
-
 router.use(isAuthenticated, isInstructor).get(getFiles)
 
 export default router

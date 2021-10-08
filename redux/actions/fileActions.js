@@ -12,10 +12,12 @@ import {
 import axios from "axios"
 
 export const deleteFileCourse = (id) => async (dispatch) => {
+  console.log(id)
+
   try {
     dispatch({ type: FILE_DELETE_REQUEST })
 
-    const { data } = await axios.delete(`/api/delete/${id}`)
+    const { data } = await axios.delete(`/api/file/delete/${id}`)
 
     dispatch({
       type: FILE_DELETE_SUCCESS,

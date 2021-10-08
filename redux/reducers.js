@@ -1,4 +1,5 @@
 import { combineReducers } from "redux"
+import { fileGetReducer, FileGetReducer } from "./reducers/fileReducers"
 import {
   courseEditReducer,
   courseLoadReducer,
@@ -46,6 +47,9 @@ const reducer = combineReducers({
   enrollmentCheck: enrollmentCheckReducer,
   freeEnroll: freeEnrollReducer,
   courseEdit: courseEditReducer,
+
+  //files
+  fileGet: fileGetReducer,
 })
 
 export default reducer

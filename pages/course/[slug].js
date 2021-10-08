@@ -65,9 +65,6 @@ const Course = () => {
 
       dispatch(freeEnroll(course))
 
-      // const { data } = await axios.post(
-      //   `/api/course/enrollment/free/${course._id}`
-      // )
       // toast(data.message)
       return router.push(`/user/course/${course.slug}`)
     } catch (error) {

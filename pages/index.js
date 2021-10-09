@@ -30,7 +30,9 @@ const Home = () => {
       <Grid container>
         {courses.map((course) => (
           <Grid item key={course._id} xs={4}>
-            <Box padding="0.5rem">
+            <Box
+              style={{ padding: "0.5rem", paddingLeft: "0", paddingRight: "0" }}
+            >
               <CourseCard course={course} />
             </Box>
           </Grid>
@@ -39,14 +41,6 @@ const Home = () => {
     </div>
   )
 }
-
-// export async function getServerSideProps() {
-//   const { data } = await axios.get(`${process.env.API}/api/course/publish/all`)
-
-//   return {
-//     props: { courses: data },
-//   }
-// }
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>

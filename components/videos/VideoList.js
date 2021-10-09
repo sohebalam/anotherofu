@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Posts from "../videos/posts/Posts"
-import Pagination from "../videos/posts/Pagination"
 import { Box } from "@material-ui/core"
+import Pagination from "@mui/material/Pagination"
 
 function VideoList({ videos }) {
   const [posts, setPosts] = useState([])
@@ -22,15 +22,21 @@ function VideoList({ videos }) {
   }, [videos, currentPosts])
 
   // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+  const handleChange = async (number) => {
+    if (!number) number = 1
+    setCurrentPage(number)
+  }
 
   return (
     <Box style={{ padding: "0.25rem" }}>
       <Posts posts={currentPosts} />
+
       <Pagination
-        postsPerPage={postsPerPage}
-        totalPosts={posts.length}
-        paginate={paginate}
+        className="pagination"
+        count={Math.ceil(posts.length / postsPerPage)}
+        color="primary"
+        onChange={(e) => handleChange(e.target.textContent)}
       />
     </Box>
   )

@@ -6,22 +6,19 @@ import {
   Avatar,
   Tooltip,
   Button,
-  Modal,
   List,
   Grid,
   Box,
-  DialogContent,
   makeStyles,
   DialogActions,
   IconButton,
   ListItemAvatar,
   Snackbar,
   Alert,
+  Typography,
 } from "@material-ui/core"
-// import { CheckOutlined, UploadOutlined } from "@ant-design/icons"
 import Item from "@material-ui/icons"
 import ReactMarkdown from "react-markdown"
-import { Typography } from "antd"
 import { CheckCircleOutline } from "@material-ui/icons"
 import EditIcon from "@material-ui/icons/Edit"
 import HighlightOffIcon from "@material-ui/icons/HighlightOff"
@@ -211,20 +208,53 @@ const CourseView = () => {
             <Grid container>
               <Grid item xs={2}>
                 <Avatar
-                  style={{ height: "100px", width: "100px" }}
+                  style={{ height: "150px", width: "150px" }}
                   src={course.image ? course.image.Location : "/course.jpg"}
                 />
               </Grid>
-              <Grid item xs={8}>
-                <Typography variant="h5">{course.title}</Typography>
-                <Typography variant="subtitle1">
+              <Grid item xs={3}>
+                <Typography variant="h3">{course.title}</Typography>
+                <Typography variant="h4">
                   {course.lessons && course.lessons.length} Lessons
                 </Typography>
-                <Typography variant="subtitle2">{course.category}</Typography>
+                <Typography variant="h5">{course.category}</Typography>
+                <Box padding="1rem">
+                  <ReactMarkdown>
+                    <Typography variant="h5">{course.description}</Typography>
+                  </ReactMarkdown>
+                </Box>
               </Grid>
+              <Grid item xs={4}>
+                <Box mt="1rem">
+                  <Button
+                    variant="outlined"
+                    fullWidth={true}
+                    color="primary"
+                    icon={<PublishIcon />}
+                    size="large"
+                    onClick={() => setVisible(true)}
+                  >
+                    Add Video
+                  </Button>
+                </Box>
+                <Box mt="1rem">
+                  <Button
+                    variant="outlined"
+                    fullWidth={true}
+                    color="primary"
+                    icon={<PublishIcon />}
+                    size="large"
+                    onClick={() => setVisible(true)}
+                  >
+                    Add File
+                  </Button>
+                </Box>
+              </Grid>
+
+              <Grid item xs={1}></Grid>
               <Grid item xs={2}>
                 <div>
-                  <Box padding="0.5rem">
+                  <Box marginLeft="6rem">
                     <Tooltip
                       title={`${students} Enrolled`}
                       style={{ marginBottom: "0.5rem", marginRight: "1rem" }}
@@ -268,28 +298,6 @@ const CourseView = () => {
                 </div>
               </Grid>
             </Grid>
-            <Grid container>
-              <Grid item xs={3}>
-                <Box mt="1rem">
-                  <Button
-                    variant="outlined"
-                    fullWidth={true}
-                    color="primary"
-                    icon={<PublishIcon />}
-                    size="large"
-                    onClick={() => setVisible(true)}
-                  >
-                    Add Lesson
-                  </Button>
-                </Box>
-              </Grid>
-              <Grid item xs={8}>
-                <Box padding="1rem">
-                  <ReactMarkdown>{course.description}</ReactMarkdown>
-                </Box>
-              </Grid>
-              <Grid item xs={1}></Grid>
-            </Grid>
           </Grid>
         )}
 
@@ -322,7 +330,7 @@ const CourseView = () => {
         </Dialog>
       </>
       <div>
-        <h4>{course && course.lessons && course.lessons.length} Lessons</h4>
+        {/* <h4>{course && course.lessons && course.lessons.length} Lessons</h4> */}
         {course &&
           course.lessons?.map((lesson, index) => (
             <List key={lesson._id}>

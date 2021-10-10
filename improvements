@@ -2,7 +2,6 @@ homepage
 dragable list
 redux
   destination: @stripe_account,
-  mui pagination 
   
 
 instrcutor dashboard and routes - containers

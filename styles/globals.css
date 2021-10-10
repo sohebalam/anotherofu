@@ -59,7 +59,7 @@ ul {
 }
 
 .pagination {
-  display: grid;
+  /* display: grid; */
   place-content: center;
   background: #eceff1;
   padding: 5px;

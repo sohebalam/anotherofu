@@ -11,6 +11,7 @@ import { Container } from "@material-ui/core"
 import { Provider } from "next-auth/client"
 // import Footer from "../components/Footer"
 import Layout from "../components/layout/Layout"
+import { StyledEngineProvider } from "@mui/material/styles"
 import "bootstrap/dist/css/bootstrap.min.css"
 
 function MyApp({ Component, pageProps }) {
@@ -36,7 +37,9 @@ function MyApp({ Component, pageProps }) {
           <CssBaseline />
           <Provider session={pageProps.session}>
             <Layout>
-              <Component {...pageProps} />
+              <StyledEngineProvider injectFirst>
+                <Component {...pageProps} />
+              </StyledEngineProvider>
             </Layout>
           </Provider>
         </Container>

@@ -89,7 +89,6 @@ export const updateProfile = async (req, res) => {
     await user.save()
     res.status(200).json({
       success: true,
-      user,
     })
   } else {
     const user = await User.findById(req.user._id)

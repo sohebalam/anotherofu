@@ -87,6 +87,7 @@ const Profile = () => {
   })
 
   const { name, email, password } = user
+
   const submitHandler = (e) => {
     e.preventDefault()
 
@@ -97,7 +98,10 @@ const Profile = () => {
     }
 
     dispatch(updateProfile(userData))
+    router.reload()
   }
+
+  // console.log(isUpdated)
 
   const onChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })

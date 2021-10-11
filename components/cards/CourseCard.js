@@ -15,7 +15,7 @@ const CourseCard = ({ course }) => {
         />
         <Box style={{ marginBottom: "0.25rem" }}>
           <Typography variant="h5">{title} </Typography>
-          <Typography variant="body1">{instructor.name}</Typography>
+          <Typography variant="body1">{instructor?.name}</Typography>
         </Box>
         <Chip
           label={category}

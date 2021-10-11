@@ -94,7 +94,7 @@ export const profileReducer = (state = { dbUser: null }, action) => {
   }
 }
 
-export const updateProfileReducer = (state = {}, action) => {
+export const updateProfileReducer = (state = { isUpdated: false }, action) => {
   switch (action.type) {
     case UPDATE_PROFILE_REQUEST:
       return { loading: true }
@@ -102,8 +102,6 @@ export const updateProfileReducer = (state = {}, action) => {
       // console.log(action.payload)
       return { loading: false, isUpdated: action.payload }
 
-    case UPDATE_PROFILE_RESET:
-      return { loading: false, isUpdated: false }
     case UPDATE_PROFILE_FAIL:
       return { loading: false, error: action.payload }
     default:

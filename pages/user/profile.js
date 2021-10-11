@@ -16,11 +16,7 @@ import React, { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import { CircularProgress } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
-import {
-  updateProfile,
-  clearErrors,
-  loadUser,
-} from "../../redux/actions/userActions"
+import { updateProfile, loadUser } from "../../redux/actions/userActions"
 import { UPDATE_PROFILE_RESET } from "../../redux/constants/userTypes"
 import { getSession } from "next-auth/client"
 
@@ -54,8 +50,34 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Profile = () => {
-  const classes = useStyles()
+  const { dbUser, loading, message } = useSelector((state) => state.profile)
+  const {
+    error,
+    isUpdated,
+    loading: updateLoading,
+  } = useSelector((state) => state.update)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!dbUser) {
+      dispatch(loadUser())
+      setUser({
+        name: dbUser?.name,
+        email: dbUser?.email,
+      })
+    } else if (dbUser) {
+      setUser({
+        name: dbUser.name,
+        email: dbUser.email,
+      })
+    }
+
+    if (error) {
+      console.log(error)
+    }
+  }, [dispatch, dbUser, isUpdated])
+  const classes = useStyles()
+
   const router = useRouter()
 
   const [user, setUser] = useState({
@@ -64,18 +86,7 @@ const Profile = () => {
     password: "",
   })
 
-  const { dbUser, loading, message } = useSelector((state) => state.profile)
-
-  // console.log(dbUser)
-
-  const {
-    error,
-    isUpdated,
-    loading: updateLoading,
-  } = useSelector((state) => state.update)
-
-  // console.log(isUpdated)
-
+  const { name, email, password } = user
   const submitHandler = (e) => {
     e.preventDefault()
 
@@ -91,141 +102,112 @@ const Profile = () => {
   const onChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
-  const { name, email, password } = user
-
-  useEffect(() => {
-    if (dbUser) {
-      setUser({
-        name: dbUser.name,
-        email: dbUser.email,
-      })
-    }
-
-    if (error) {
-      console.log(error)
-      // dispatch(clearErrors())
-    }
-
-    if (isUpdated) {
-      // router.push("/")
-      dispatch(loadUser())
-      dispatch({ type: UPDATE_PROFILE_RESET })
-      // dispatch({ type: loadUser })
-    }
-  }, [dispatch, isUpdated, dbUser, error, setUser])
 
   return (
     <>
-      {loading ? (
+      {loading || updateLoading ? (
         <CircularProgress />
       ) : (
-        <Grid container>
-          <Grid item sm={4}>
-            <Box mt="0.5rem">
-              <UserNav />
-            </Box>
-          </Grid>
+        dbUser && (
+          <Grid container>
+            <Grid item sm={4}>
+              <Box mt="0.5rem">
+                <UserNav />
+              </Box>
+            </Grid>
 
-          <Grid item sm={4}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline />
-              <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                  <PersonIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                  Update Profile
-                </Typography>
-                {loading && <CircularProgress />}
-                {message && <Alert severity="success">{message}</Alert>}
-                <form
-                  className={classes.form}
-                  noValidate
-                  onSubmit={submitHandler}
-                >
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <TextField
-                        autoComplete="name"
-                        name="name"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="Name"
-                        label="Name"
-                        autoFocus
-                        value={name || ""}
-                        onChange={onChange}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        value={email || ""}
-                        onChange={onChange}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password || ""}
-                        onChange={onChange}
-                      />
-                    </Grid>
-                    {/* <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid> */}
-                  </Grid>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    Update Profile
-                  </Button>
-                  <Grid container justifyContent="flex-end"></Grid>
-                </form>
-              </div>
-            </Container>
-          </Grid>
-          <Grid item sm={4}>
-            <Box styles={{ marginTop: "12" }}>
+            <Grid item sm={4}>
               <Container component="main" maxWidth="xs">
-                <div className={classes.profile}>
-                  {dbUser && (
-                    <div>
-                      <p>Signed in as {dbUser.email}</p>
-                      <p>Name: {dbUser.name}</p>
-                      <img src={dbUser.image} alt={dbUser.name} />
-                    </div>
-                  )}
-                  {/* <SocialLogin /> */}
+                <CssBaseline />
+                <div className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                    <PersonIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    Update Profile
+                  </Typography>
+                  {loading && <CircularProgress />}
+                  {message && <Alert severity="success">{message}</Alert>}
+                  <form
+                    className={classes.form}
+                    noValidate
+                    onSubmit={submitHandler}
+                  >
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          autoComplete="name"
+                          name="name"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="Name"
+                          label="Name"
+                          autoFocus
+                          value={user?.name || ""}
+                          onChange={onChange}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="email"
+                          label="Email Address"
+                          name="email"
+                          autoComplete="email"
+                          value={user?.email || ""}
+                          onChange={onChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          variant="outlined"
+                          required
+                          fullWidth
+                          name="password"
+                          label="Password"
+                          type="password"
+                          id="password"
+                          autoComplete="current-password"
+                          value={user?.password || ""}
+                          onChange={onChange}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                    >
+                      Update Profile
+                    </Button>
+                    <Grid container justifyContent="flex-end"></Grid>
+                  </form>
                 </div>
               </Container>
-            </Box>
+            </Grid>
+            <Grid item sm={4}>
+              <Box styles={{ marginTop: "12" }}>
+                <Container component="main" maxWidth="xs">
+                  <div className={classes.profile}>
+                    {dbUser && (
+                      <div>
+                        <p>Signed in as {dbUser?.email}</p>
+                        <p>Name: {dbUser?.name}</p>
+                        <img src={dbUser?.image} alt={dbUser?.name} />
+                      </div>
+                    )}
+                  </div>
+                </Container>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        )
       )}
     </>
   )

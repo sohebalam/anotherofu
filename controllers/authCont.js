@@ -63,13 +63,16 @@ export const currentUserProfile = catchAsyncErrors(async (req, res) => {
 })
 
 export const updateProfile = async (req, res) => {
-  // console.log(req.user._id)
+  console.log(req.method)
 
   if (req.user.id) {
     const user = await User.findOne({ socialId: req.user.id })
 
+    console.log(user)
+
     if (user) {
       user.name = req.body.name
+      user.email = req.body.email
 
       if (req.body.password) {
         if (req.body.password < 6) {
@@ -82,14 +85,11 @@ export const updateProfile = async (req, res) => {
         user.password = await bcrypt.hash(req.body.password, salt)
       }
     }
-    if (user.email) {
-      const { email } = user
 
-      user.email = req.body.email
-    }
     await user.save()
     res.status(200).json({
       success: true,
+      user,
     })
   } else {
     const user = await User.findById(req.user._id)
@@ -271,23 +271,23 @@ export const getUserDetails = catchAsyncErrors(async (req, res) => {
   })
 })
 
-export const updateUserDetails = catchAsyncErrors(async (req, res) => {
-  const newUserData = {
-    name: req.body.name,
-    email: req.body.email,
-    role: req.body.role,
-  }
+// export const updateUserDetails = catchAsyncErrors(async (req, res) => {
+//   const newUserData = {
+//     name: req.body.name,
+//     email: req.body.email,
+//     role: req.body.role,
+//   }
 
-  const user = await User.findByIdAndUpdate(req.query.id, newUserData, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  })
+//   const user = await User.findByIdAndUpdate(req.query.id, newUserData, {
+//     new: true,
+//     runValidators: true,
+//     useFindAndModify: false,
+//   })
 
-  res.status(200).json({
-    success: true,
-  })
-})
+//   res.status(200).json({
+//     success: true,
+//   })
+// })
 
 export const deleteUser = catchAsyncErrors(async (req, res) => {
   // console.log(req.method, req.query.id)

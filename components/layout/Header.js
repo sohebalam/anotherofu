@@ -14,11 +14,11 @@ import AssignmentIcon from "@material-ui/icons/Assignment"
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart"
 import { loadUser, socialReg } from "../../redux/actions/userActions"
 import { useSelector, useDispatch } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import MenuButton from "../layout/MenuButton"
 import InstructorMenu from "./InstructorMenu"
-// import HowToRegIcon from "@mui/icons-material/HowToReg"
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople"
+import { Alert } from "@mui/material"
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -32,38 +32,47 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function Header() {
+  const [socialUser, setSocialUser] = useState(false)
   const [session] = useSession()
 
-  // console.log(session)
-
-  // const handleSignin = (e) => {
-  //   e.preventDefault()
-  //   signIn()
-  // }
+  console.log(session)
 
   const dispatch = useDispatch()
 
   const profile = useSelector((state) => state.profile)
   const { loading, error, dbUser } = profile
 
-  // console.log("headerd", dbUser)
-
   useEffect(() => {
-    const userData = {
-      id: dbUser?._id,
-      name: dbUser?.name,
-      email: dbUser?.email,
-      password: null,
-    }
+    if (session) {
+      const { user } = session
 
-    if (!dbUser) {
-      dispatch(socialReg(userData))
+      if (!user.email) {
+        setSocialUser(true)
+      }
+
+      const userData = {
+        id: user.id,
+        name: user.name,
+        email: user?.email,
+        password: user?.password,
+      }
+      // console.log(dbUser)
+      if (!dbUser) {
+        if (user.id) {
+          dispatch(socialReg(userData))
+          console.log(userData)
+        }
+      }
     }
-    // }
     if (!dbUser) {
-      dispatch(loadUser())
+      if (session) {
+        dispatch(loadUser())
+      }
     }
-  }, [dbUser])
+    if (dbUser?.email) {
+      setSocialUser(false)
+    }
+  }, [session])
 
   const classes = useStyles()
 
@@ -72,15 +81,6 @@ function Header() {
       <div component="nav">
         <AppBar position="static" style={{ color: "primary" }}>
           <Toolbar>
-            {/* <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              // onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
-            >
-              <MenuIcon />
-            </IconButton> */}
             <IconButton aria-label="menu">
               <Link href="/">
                 {<img src="/v3.png" height="40px" alt="logo" />}
@@ -105,13 +105,7 @@ function Header() {
 
               {dbUser ? (
                 <>
-                  <div>
-                    {/* <Link href="/user/instructor/create"> */}
-                    {/* <Button style={{ color: "white" }}> */}
-
-                    {/* </Button> */}
-                    {/* </Link> */}
-                  </div>
+                  <div></div>
 
                   <MenuButton dbUser={dbUser} />
                 </>
@@ -135,6 +129,12 @@ function Header() {
           </Toolbar>
         </AppBar>
       </div>
+      {socialUser && (
+        <Alert severity="warning">
+          Complete Your Full User Profile click{" "}
+          <Link href="/user/profile">here</Link>
+        </Alert>
+      )}
     </div>
   )
 }

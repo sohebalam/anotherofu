@@ -27,6 +27,9 @@ const lessonSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+const imageSchema = new mongoose.Schema({
+  image: {},
+})
 
 const courseSchema = new mongoose.Schema(
   {
@@ -41,6 +44,10 @@ const courseSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
     },
+    playlistId: {
+      type: String,
+      required: true,
+    },
     description: {
       type: {},
       minlength: 200,
@@ -50,7 +57,7 @@ const courseSchema = new mongoose.Schema(
       type: Number,
       default: 9.99,
     },
-    image: {},
+    image: [imageSchema],
     category: String,
     published: {
       type: Boolean,

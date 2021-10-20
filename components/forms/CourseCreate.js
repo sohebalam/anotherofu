@@ -98,11 +98,11 @@ const CourseCreate = ({
             margin="normal"
             required
             fullWidth
-            id="category"
-            label="Category"
-            name="category"
+            id="playlistId"
+            label="You Tub Playlist ID"
+            name="playlistId"
             autoFocus
-            value={values.category}
+            value={values.playlistId}
             onChange={handleChange}
           />
 

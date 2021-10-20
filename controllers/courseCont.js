@@ -17,7 +17,7 @@ const awsConfig = {
 const S3 = new AWS.S3(awsConfig)
 
 export const uploadImage = async (req, res) => {
-  // console.log(req.body)
+  console.log(req.method)
 
   try {
     const { image } = req.body
@@ -47,7 +47,7 @@ export const uploadImage = async (req, res) => {
         console.log(err)
         return res.status(400)
       }
-      // console.log(data)
+      console.log(data)
       res.send(data)
     })
   } catch (err) {
@@ -56,6 +56,8 @@ export const uploadImage = async (req, res) => {
 }
 
 export const removeImage = async (req, res) => {
+  // const { ETag } = req.body.image
+
   try {
     const { image } = req.body
 
@@ -84,10 +86,10 @@ export const removeImage = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-  // console.log(req.method)
-  // console.log("CREATE COURSE", req.body.price)
-  // console.log(req.body)
+  console.log(req.method)
 
+  // console.log("CREATE COURSE", req.body.price)
+  console.log(req.body)
   if (req.body.paid === true && req.body.price === 0) {
     req.body.price = 9.99
   }
@@ -214,6 +216,9 @@ export const addLesson = async (req, res) => {
   try {
     const { slug, instructorId } = req.query
     const { title, content, video } = req.body
+    // console.log(req.query)
+    // console.log(req.body)
+
     if (req.user._id != instructorId) {
       return res.status(400).json({ message: "Unathorized" })
     }

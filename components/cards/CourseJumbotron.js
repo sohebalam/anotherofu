@@ -83,7 +83,7 @@ const SingleCourseJumbotron = ({
                 className="pb-4 mr-2"
               />
               <Typography variant="body1">
-                Created by {instructor.name}
+                Created by {instructor?.name}
               </Typography>
               <Typography variant="body1">
                 Last updated {new Date(updatedAt).toLocaleString()}

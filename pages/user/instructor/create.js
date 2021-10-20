@@ -19,7 +19,7 @@ const CourseCreate = () => {
     price: 0,
     uploading: false,
     paid: false,
-    category: "",
+    playlistId: "",
     loading: false,
   })
   const [preview, setPreview] = useState("")

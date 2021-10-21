@@ -21,7 +21,7 @@ function VideoList({ videos }) {
   const indexOfFirstPost = indexOfLastPost - postsPerPage
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost)
 
-  console.log("currentposts", currentPosts)
+  // console.log("currentposts", currentPosts)
 
   useEffect(() => {
     setPosts(videos)

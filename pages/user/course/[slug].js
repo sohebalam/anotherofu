@@ -2,35 +2,68 @@ import { Grid } from "@material-ui/core"
 import VideoDetail from "../../../components/videos/VideoDetail"
 import { useEffect, useState } from "react"
 import VideoList from "../../../components/videos/VideoList"
-
+import { getSingleCourse } from "../../../redux/actions/lessonActions"
+import { wrapper } from "../../../redux/store"
+import { useRouter } from "next/router"
+import { useSelector, useDispatch } from "react-redux"
 const YOUTUBE_PLAYLIST_ITEMS_API =
   "https://www.googleapis.com/youtube/v3/playlistItems"
 
 const playlistId = "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa"
 
-export async function getServerSideProps() {
-  const res = await fetch(
-    `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-  )
+// export async function getServerSideProps() {
+//   const res = await fetch(
+//     `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
+//   )
 
-  // console.log(res)
-  const data = await res?.json()
+//   // console.log(res)
+//   const data = await res?.json()
 
-  // console.log(data)
+//   // console.log(data)
 
-  return {
-    props: {
-      data,
-    },
+//   return {
+//     props: {
+//       data,
+//     },
+//   }
+// }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { params, req } = context
+
+    console.log("params", params)
+
+    await store.dispatch(getSingleCourse(req, params.slug))
+
+    // const res = await fetch(
+    //   `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
+    // )
+
+    // console.log(res)
+    // const data = await res?.json()
+
+    // console.log(data)
+
+    // return {
+    //   props: {
+    //     data,
+    //   },
+    // }
   }
-}
+)
 
-const Index = ({ data }) => {
+const Index = () => {
   const [videos, setVideos] = useState([])
   // const [onSelectedVideo, setOnSelectedVideo] = useState({})
   const [selectedVideo, setSelectedVideo] = useState({})
 
-  // console.log(selectedVideo)
+  const singleCourse = useSelector((state) => state.singleCourse)
+  const { loading, error: courseError, course } = singleCourse
+
+  const data = course
+
+  console.log(selectedVideo)
 
   const { items } = data
 

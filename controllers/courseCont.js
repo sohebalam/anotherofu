@@ -129,16 +129,25 @@ export const instructorCourses = async (req, res) => {
 export const readCourse = async (req, res) => {
   const { slug } = req.query
   if (req.query) {
-    // console.log(req.query)
+    console.log(req.query)
   }
 
-  // return
   try {
-    // console.log(req.method)
+    const YOUTUBE_PLAYLIST_ITEMS_API =
+      "https://www.googleapis.com/youtube/v3/playlistItems"
+
     const course = await Course.findOne({ slug: slug })
       .populate("instructor", "_id name")
       .exec()
-    res.json(course)
+
+    const playlistId = course?.playlistId
+    const response = await fetch(
+      `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
+    )
+
+    const data = await response?.json()
+
+    res.send(data)
   } catch (error) {
     console.log(error)
   }

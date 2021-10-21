@@ -142,9 +142,14 @@ export const getSingleCourse = (req, slug) => async (dispatch) => {
   try {
     dispatch({ type: SINGLE_COURSE_REQUEST })
 
+    // console.log(req)
+    console.log(slug)
+
     const { origin } = absoluteUrl(req)
 
     const { data } = await axios.get(`${origin}/api/course/single/${slug}`)
+
+    console.log(data)
 
     dispatch({
       type: SINGLE_COURSE_SUCCESS,

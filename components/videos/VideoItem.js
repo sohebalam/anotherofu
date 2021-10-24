@@ -18,14 +18,14 @@ const VideoItem = ({ video }) => {
           <Image
             // style={{ marginRight: "20px" }}
             alt="thumbnail"
-            src={video.snippet.thumbnails.medium.url}
+            src={video.thumbnailUrl}
             height="150px"
             layout="fill"
           />
         </Box>
         <Skeleton variant="rectangular" width={250} height={200} />
         <Typography variant="subtitle1">
-          <b>{video.snippet.title}</b>
+          <b>{video.title}</b>
         </Typography>
       </Paper>
     </Grid>

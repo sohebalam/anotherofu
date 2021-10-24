@@ -11,64 +11,37 @@ const YOUTUBE_PLAYLIST_ITEMS_API =
 
 const playlistId = "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa"
 
-// export async function getServerSideProps() {
-//   const res = await fetch(
-//     `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-//   )
-
-//   // console.log(res)
-//   const data = await res?.json()
-
-//   // console.log(data)
-
-//   return {
-//     props: {
-//       data,
-//     },
-//   }
-// }
-
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const { params, req } = context
 
-    console.log("params", params)
+    // console.log("params", params)
 
-    await store.dispatch(getSingleCourse(req, params.slug))
+    const slug = "fdzsf"
 
-    // const res = await fetch(
-    //   `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-    // )
-
-    // console.log(res)
-    // const data = await res?.json()
-
-    // console.log(data)
-
-    // return {
-    //   props: {
-    //     data,
-    //   },
-    // }
+    await store.dispatch(getSingleCourse(req, slug))
   }
 )
 
 const Index = () => {
-  const [videos, setVideos] = useState([])
+  // const [videos, setVideos] = useState([])
   // const [onSelectedVideo, setOnSelectedVideo] = useState({})
-  const [selectedVideo, setSelectedVideo] = useState({})
+  const [selectedVideo] = useState({})
 
   const singleCourse = useSelector((state) => state.singleCourse)
   const { loading, error: courseError, course } = singleCourse
 
-  const data = course
+  console.log(course)
 
+  const videos = course.videos
+
+  console.log("viasdadsasd", videos)
   console.log(selectedVideo)
 
-  const { items } = data
+  // const { items } = data
 
   useEffect(() => {
-    setVideos(items)
+    // setVideos(items)
   }, [])
 
   return (

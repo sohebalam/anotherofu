@@ -14,11 +14,11 @@ const VideoDetail = () => {
 
   // console.log(video)
 
-  const videoId = video?.snippet.resourceId.videoId
+  const videoId = video?.videoId
 
-  const title = video?.snippet.title
-  const channelTitle = video?.snippet.channelTitle
-  const description = video?.snippet.channelTitle
+  const title = video?.title
+  const channelTitle = video?.channelTitle
+  const description = video?.description
 
   // console.log(videoId, title, channelTitle, description)
 

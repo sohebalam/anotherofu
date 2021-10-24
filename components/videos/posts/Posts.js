@@ -12,7 +12,10 @@ const Posts = ({ posts }) => {
     <div>
       <ul className="list-group mb-4">
         {posts.map((video) => (
-          <Button key={video.id} onClick={() => dispatch(selectLesson(video))}>
+          <Button
+            key={video.videoId}
+            onClick={() => dispatch(selectLesson(video))}
+          >
             <VideoItem video={video} />
           </Button>
         ))}

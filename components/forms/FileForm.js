@@ -8,8 +8,6 @@ import {
   CircularProgress,
 } from "@material-ui/core"
 import { useDispatch, useSelector } from "react-redux"
-// import { API_URL } from "../utils/constants"
-import axios from "axios"
 import { DropzoneArea } from "material-ui-dropzone"
 import { makeStyles } from "@material-ui/core/styles"
 

@@ -29,6 +29,9 @@ import AddLesson from "../../../../components/forms/AddLesson"
 import CloseIcon from "@material-ui/icons/Close"
 import ListItem from "@material-ui/core/ListItem"
 import GroupIcon from "@mui/icons-material/Group"
+import CourseForm from "../../../../components/forms/FileForm"
+import FileList from "../../../../components/file/FileList"
+import VideoList from "../../../../components/videos/VideoList"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
 
 const CourseView = () => {
   const [course, setCourse] = useState({})
+  const [file, setFile] = useState({})
+  const [fileVisible, setFileVisible] = useState(false)
   const [visible, setVisible] = useState(false)
   const [values, setValues] = useState({
     title: "",
@@ -60,6 +65,7 @@ const CourseView = () => {
   const classes = useStyles()
   const [uploading, setUploading] = useState(false)
   const [uploadButtonText, setUploadButtonText] = useState("Upload Video")
+  const [fileButtonText, setFileButtonText] = useState("Upload File")
   const [progress, setProgress] = useState(0)
   const [students, setStudents] = useState(0)
 
@@ -200,150 +206,174 @@ const CourseView = () => {
   }
 
   return (
-    <InstructorRoute>
-      <>
-        {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
-        {course && (
-          <Grid container key={course._id} style={{ marginTop: "2rem" }}>
-            <Grid container>
-              <Grid item xs={2}>
-                <Avatar
-                  style={{ height: "150px", width: "150px" }}
-                  src={course.image ? course.image.Location : "/course.jpg"}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Typography variant="h3">{course.title}</Typography>
-                <Typography variant="h4">
-                  {course.lessons && course.lessons.length} Lessons
-                </Typography>
-                <Typography variant="h5">{course.category}</Typography>
-                <Box padding="1rem">
-                  <ReactMarkdown>
-                    <Typography variant="h5">{course.description}</Typography>
-                  </ReactMarkdown>
-                </Box>
-              </Grid>
-              <Grid item xs={4}>
-                <Box mt="1rem">
-                  <Button
-                    variant="outlined"
-                    fullWidth={true}
-                    color="primary"
-                    icon={<PublishIcon />}
-                    size="large"
-                    onClick={() => setVisible(true)}
-                  >
-                    Add Video
-                  </Button>
-                </Box>
-                <Box mt="1rem">
-                  <Button
-                    variant="outlined"
-                    fullWidth={true}
-                    color="primary"
-                    icon={<PublishIcon />}
-                    size="large"
-                    onClick={() => setVisible(true)}
-                  >
-                    Add File
-                  </Button>
-                </Box>
-              </Grid>
-
-              <Grid item xs={1}></Grid>
-              <Grid item xs={2}>
-                <div>
-                  <Box marginLeft="6rem">
-                    <Tooltip
-                      title={`${students} Enrolled`}
-                      style={{ marginBottom: "0.5rem", marginRight: "1rem" }}
-                    >
-                      <GroupIcon
-                        className="h5 pointer mr-4"
-                        className={classes.iconColor}
-                      />
-                    </Tooltip>
-
-                    <Tooltip title="Edit" style={{ marginRight: "1rem" }}>
-                      <EditIcon
-                        onClick={() =>
-                          router.push(`/user/instructor/course/edit/${slug}`)
-                        }
-                        className="h5 pointer text-warning mr-4"
-                      />
-                    </Tooltip>
-
-                    {course.lessons && course.lessons.length < 5 ? (
-                      <Tooltip title="Min 5 lessons required to publish">
-                        <HelpOutlineIcon className="h5 pointer text-danger" />
-                      </Tooltip>
-                    ) : course.published ? (
-                      <Tooltip title="Unpublish">
-                        <HighlightOffIcon
-                          onClick={handlePublish}
-                          onClick={(e) => handleUnpublish(e, course._id)}
-                          className="h5 pointer text-danger"
-                        />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip title="Publish">
-                        <CheckCircleOutline
-                          onClick={(e) => handlePublish(e, course._id)}
-                          className="h5 pointer text-success"
-                        />
-                      </Tooltip>
-                    )}
+    <>
+      <Grid container>
+        <>
+          {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
+          {course && (
+            <Grid container key={course._id} style={{ marginTop: "2rem" }}>
+              <Grid container>
+                <Grid item xs={2}>
+                  <Avatar
+                    style={{ height: "150px", width: "150px" }}
+                    src={course.image ? course.image.Location : "/course.jpg"}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography variant="h3">{course.title}</Typography>
+                  <Typography variant="h4">
+                    {course.lessons && course.lessons.length} Lessons
+                  </Typography>
+                  <Typography variant="h5">{course.category}</Typography>
+                  <Box padding="1rem">
+                    <Typography variant="h5">
+                      <ReactMarkdown children={course.description || ""} />
+                    </Typography>
                   </Box>
-                </div>
+                </Grid>
+                <Grid item xs={4}>
+                  {/* <Box mt="1rem">
+                    <Button
+                      variant="outlined"
+                      fullWidth={true}
+                      color="primary"
+                      icon={<PublishIcon />}
+                      size="large"
+                      onClick={() => setVisible(true)}
+                    >
+                      Add Video
+                    </Button>
+                  </Box> */}
+                  <Box mt="1rem">
+                    <Button
+                      variant="outlined"
+                      fullWidth={true}
+                      color="primary"
+                      icon={<PublishIcon />}
+                      size="large"
+                      onClick={() => setFileVisible(true)}
+                    >
+                      Add File
+                    </Button>
+                  </Box>
+                </Grid>
+
+                <Grid item xs={1}></Grid>
+                <Grid item xs={2}>
+                  <div>
+                    <Box marginLeft="6rem">
+                      <Tooltip
+                        title={`${students} Enrolled`}
+                        style={{ marginBottom: "0.5rem", marginRight: "1rem" }}
+                      >
+                        <GroupIcon
+                          className="h5 pointer mr-4"
+                          className={classes.iconColor}
+                        />
+                      </Tooltip>
+
+                      <Tooltip title="Edit" style={{ marginRight: "1rem" }}>
+                        <EditIcon
+                          onClick={() =>
+                            router.push(`/user/instructor/course/edit/${slug}`)
+                          }
+                          className="h5 pointer text-warning mr-4"
+                        />
+                      </Tooltip>
+
+                      {course.lessons && course.lessons.length < 5 ? (
+                        <Tooltip title="Min 5 lessons required to publish">
+                          <HelpOutlineIcon className="h5 pointer text-danger" />
+                        </Tooltip>
+                      ) : course.published ? (
+                        <Tooltip title="Unpublish">
+                          <HighlightOffIcon
+                            onClick={handlePublish}
+                            onClick={(e) => handleUnpublish(e, course._id)}
+                            className="h5 pointer text-danger"
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Publish">
+                          <CheckCircleOutline
+                            onClick={(e) => handlePublish(e, course._id)}
+                            className="h5 pointer text-success"
+                          />
+                        </Tooltip>
+                      )}
+                    </Box>
+                  </div>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        )}
+          )}
 
-        <Dialog
-          open={visible}
-          onClose={() => setVisible(false)}
-          footer={null}
-          classes={{ paper: classes.paper }}
-        >
-          <AddLesson
-            values={values}
-            setValues={setValues}
-            handleAddLesson={handleAddLesson}
-            uploading={uploading}
-            uploadButtonText={uploadButtonText}
-            handelVideo={handelVideo}
-            progress={progress}
-            handelVideoRemove={handelVideoRemove}
-          />
-          <DialogActions>
-            <IconButton
-              autoFocus
-              onClick={() => setVisible(false)}
-              color="primary"
-              className={classes.customizedButton}
-            >
-              <CloseIcon />
-            </IconButton>
-          </DialogActions>
-        </Dialog>
-      </>
-      <div>
-        {/* <h4>{course && course.lessons && course.lessons.length} Lessons</h4> */}
-        {course &&
-          course.lessons?.map((lesson, index) => (
-            <List key={lesson._id}>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar className={classes.avcolor}>{index + 1}</Avatar>
-                </ListItemAvatar>
-                {lesson.title}
-              </ListItem>
-            </List>
-          ))}
-      </div>
-    </InstructorRoute>
+          {/* <Dialog
+            open={visible}
+            onClose={() => setVisible(false)}
+            footer={null}
+            classes={{ paper: classes.paper }}
+          >
+            <AddLesson
+              values={values}
+              setValues={setValues}
+              handleAddLesson={handleAddLesson}
+              uploading={uploading}
+              uploadButtonText={uploadButtonText}
+              handelVideo={handelVideo}
+              progress={progress}
+              handelVideoRemove={handelVideoRemove}
+            />
+            <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={() => setVisible(false)}
+                color="primary"
+                className={classes.customizedButton}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogActions>
+          </Dialog> */}
+          <Dialog
+            open={fileVisible}
+            onClose={() => setFileVisible(false)}
+            footer={null}
+            classes={{ paper: classes.paper }}
+          >
+            <CourseForm />
+            <DialogActions>
+              <IconButton
+                autoFocus
+                onClick={() => setFileVisible(false)}
+                color="primary"
+                className={classes.customizedButton}
+              >
+                <CloseIcon />
+              </IconButton>
+            </DialogActions>
+          </Dialog>
+        </>
+      </Grid>
+      <Grid container>
+        <div>
+          {/* <h4>{course && course.lessons && course.lessons.length} Lessons</h4> */}
+          {/* {course &&
+            course.lessons?.map((lesson, index) => (
+              <List key={lesson._id}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar className={classes.avcolor}>{index + 1}</Avatar>
+                  </ListItemAvatar>
+                  {lesson.title}
+                </ListItem>
+              </List>
+            ))} */}
+        </div>
+        <FileList />
+        {/* <VideoList /> */}
+      </Grid>
+    </>
   )
 }
 

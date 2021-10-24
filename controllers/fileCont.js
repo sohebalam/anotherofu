@@ -56,6 +56,7 @@ export const formidableSave = async (req, res) => {
 const saveFile = async (file, fields) => {
   const { title, description } = fields
   // console.log(file.path, file.type, title, description)
+
   const data = fs.readFileSync(file.path)
   fs.writeFileSync(`./public/${file.name}`, data)
   await fs.unlinkSync(file.path)

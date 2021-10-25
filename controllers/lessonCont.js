@@ -3,12 +3,20 @@ import { nanoid } from "nanoid"
 import Course from "../models/courseModel"
 import slugify from "slugify"
 import { readFileSync } from "fs"
-import User from "../models/userModel"
 import Completed from "../models/completeModel"
 import formidable from "formidable"
 import fs from "fs"
 
 import YTList from "../models/ytListModel"
+
+export const getFiles = async (req, res) => {
+  const { slug } = req.query
+
+  const ytList = await YTList.find({
+    slug: slug,
+  })
+  res.send(ytList)
+}
 
 export const fileSave = async (req, res) => {
   const slug = req.query.slug

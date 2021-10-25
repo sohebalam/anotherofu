@@ -6,10 +6,10 @@ import { getSingleCourse } from "../../../redux/actions/lessonActions"
 import { wrapper } from "../../../redux/store"
 import { useRouter } from "next/router"
 import { useSelector, useDispatch } from "react-redux"
-const YOUTUBE_PLAYLIST_ITEMS_API =
-  "https://www.googleapis.com/youtube/v3/playlistItems"
+// const YOUTUBE_PLAYLIST_ITEMS_API =
+//   "https://www.googleapis.com/youtube/v3/playlistItems"
 
-const playlistId = "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa"
+// const playlistId = "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa"
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -17,9 +17,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     // console.log("params", params)
 
-    const slug = "fdzsf"
+    // const slug = "fdzsf"
 
-    await store.dispatch(getSingleCourse(req, slug))
+    await store.dispatch(getSingleCourse(req, params.slug))
   }
 )
 

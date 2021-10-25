@@ -55,7 +55,8 @@ export const getFiles = () => async (dispatch) => {
   }
 }
 
-export const createFile = (formData) => async (dispatch) => {
+export const createFile = (formData, slug) => async (dispatch) => {
+  console.log("createfile", slug)
   try {
     dispatch({ type: FILE_CREATE_REQUEST })
 
@@ -65,7 +66,11 @@ export const createFile = (formData) => async (dispatch) => {
       },
     }
 
-    const { data } = await axios.post(`/api/file/file/upload`, formData, config)
+    const { data } = await axios.post(
+      `/api/file/file/upload/${slug}`,
+      formData,
+      config
+    )
 
     dispatch({
       type: FILE_CREATE_SUCCESS,

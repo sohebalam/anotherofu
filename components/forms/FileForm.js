@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles"
 
 import { createFile } from "../../redux/actions/fileActions"
 import { Alert } from "@material-ui/lab"
+import slugify from "slugify"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CoursesForm = (props) => {
+const CoursesForm = ({ slug }) => {
   const classes = useStyles()
   const [productData, setProductData] = useState({
     title: "",
@@ -93,6 +94,7 @@ const CoursesForm = (props) => {
   const handleOnSubmit = async (event) => {
     event.preventDefault()
     console.log(productData)
+    console.log("slug", slug)
 
     try {
       const { title, description } = productData
@@ -104,7 +106,7 @@ const CoursesForm = (props) => {
           formData.append("description", description)
 
           setErrorMsg("")
-          dispatch(createFile(formData))
+          dispatch(createFile(formData, slug))
 
           // props.history.push("/list")
         } else {

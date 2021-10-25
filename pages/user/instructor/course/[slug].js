@@ -32,6 +32,9 @@ import GroupIcon from "@mui/icons-material/Group"
 import CourseForm from "../../../../components/forms/FileForm"
 import FileList from "../../../../components/file/FileList"
 import VideoList from "../../../../components/videos/VideoList"
+import { useSelector } from "react-redux"
+import { wrapper } from "../../../../redux/store"
+import { getSingleCourse } from "../../../../redux/actions/lessonActions"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CourseView = () => {
-  const [course, setCourse] = useState({})
+  // const [course, setCourse] = useState({})
   const [file, setFile] = useState({})
   const [fileVisible, setFileVisible] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -72,15 +75,18 @@ const CourseView = () => {
   const router = useRouter()
   const { slug } = router.query
 
-  // console.log(slug)
+  const singleCourse = useSelector((state) => state.singleCourse)
+  const { loading, error: courseError, course } = singleCourse
 
-  useEffect(() => {
-    loadCourse()
-  }, [slug])
-  const loadCourse = async () => {
-    const { data } = await axios.get(`/api/course/${slug}`)
-    setCourse(data)
-  }
+  console.log(course)
+
+  // useEffect(() => {
+  //   loadCourse()
+  // }, [slug])
+  // const loadCourse = async () => {
+  //   const { data } = await axios.get(`/api/course/${slug}`)
+  //   setCourse(data)
+  // }
 
   useEffect(() => {
     course && studentCount()
@@ -92,85 +98,6 @@ const CourseView = () => {
     })
     // console.log("STUDENT COUNT => ", data.length)
     setStudents(data.length)
-  }
-
-  const handleAddLesson = async (e) => {
-    e.preventDefault()
-    setUploading(true)
-    let instructorId = course.instructor._id
-    try {
-      const { data } = await axios.post(
-        `/api/course/${slug}/${instructorId}`,
-        values
-      )
-      setUploading(false)
-      setValues({ ...values, title: "", content: "", video: {} })
-      setProgress(0)
-      setUploadButtonText("Upload video")
-      setVisible(false)
-      setCourse(data)
-      // toast("Lesson added")
-    } catch (error) {
-      console.log(error)
-      // toast("Lesson add failed")
-    }
-  }
-
-  const handelVideo = async (e) => {
-    // const file = e.target.files[0]
-    // setUploadButtonText(file.name)
-
-    try {
-      const file = e.target.files[0]
-      setUploadButtonText(file.name)
-      setUploading(true)
-      const formData = new FormData()
-      formData.append("video", file)
-
-      let instructorId = course.instructor._id
-
-      const { data } = await axios.post(
-        `/api/course/video/${instructorId}`,
-        formData,
-        {
-          onUploadProgress: (e) =>
-            setProgress(Math.round((100 * e.loaded) / e.total)),
-        }
-      )
-
-      // console.log(data)
-      setValues({ ...values, video: data })
-      setUploading(false)
-      // toast("Video Upload Success")
-    } catch (error) {
-      console.log(error)
-      setUploading(false)
-      // toast("Video Upload Failed")
-    }
-  }
-
-  const handelVideoRemove = async () => {
-    try {
-      setUploading(true)
-
-      let instructorId = course.instructor._id
-      // console.log(values)
-      let video = values.video
-      console.log(video)
-
-      const { data } = await axios.post(
-        `/api/course/video/remove/${instructorId}`,
-        values.video
-      )
-      console.log(data)
-      setValues({ ...values, video: {} })
-      setUploading(false)
-      setUploadButtonText("Upload Video")
-    } catch (err) {
-      console.log(err)
-      setUploading(false)
-      // toast("Video remove failed")
-    }
   }
 
   const handlePublish = async (e, courseId) => {
@@ -308,40 +235,13 @@ const CourseView = () => {
             </Grid>
           )}
 
-          {/* <Dialog
-            open={visible}
-            onClose={() => setVisible(false)}
-            footer={null}
-            classes={{ paper: classes.paper }}
-          >
-            <AddLesson
-              values={values}
-              setValues={setValues}
-              handleAddLesson={handleAddLesson}
-              uploading={uploading}
-              uploadButtonText={uploadButtonText}
-              handelVideo={handelVideo}
-              progress={progress}
-              handelVideoRemove={handelVideoRemove}
-            />
-            <DialogActions>
-              <IconButton
-                autoFocus
-                onClick={() => setVisible(false)}
-                color="primary"
-                className={classes.customizedButton}
-              >
-                <CloseIcon />
-              </IconButton>
-            </DialogActions>
-          </Dialog> */}
           <Dialog
             open={fileVisible}
             onClose={() => setFileVisible(false)}
             footer={null}
             classes={{ paper: classes.paper }}
           >
-            <CourseForm />
+            <CourseForm slug={slug} />
             <DialogActions>
               <IconButton
                 autoFocus
@@ -376,5 +276,17 @@ const CourseView = () => {
     </>
   )
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { params, req } = context
+
+    // console.log("params", params)
+
+    // const slug = "fdzsf"
+
+    await store.dispatch(getSingleCourse(req, params.slug))
+  }
+)
 
 export default CourseView

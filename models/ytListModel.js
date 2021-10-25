@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 // const { ObjectId } = mongoose.Schema
 
 const ytListSchema = new mongoose.Schema(
-  { videos: [], files: [], lessons: [] },
+  { slug: { type: String }, videos: [], files: [], lessons: [] },
 
   { timestamps: true }
 )

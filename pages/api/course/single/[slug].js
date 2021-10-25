@@ -6,11 +6,8 @@ import formidable from "formidable"
 import onError from "../../../../middlewares/errors"
 
 import { isAuthenticated, isInstructor } from "../../../../middlewares/auth"
-import {
-  addLesson,
-  readCourse,
-  youtube,
-} from "../../../../controllers/courseCont"
+import { addLesson, readCourse } from "../../../../controllers/courseCont"
+import { youtube } from "../../../../controllers/lessonCont"
 
 const router = nc({ onError })
 

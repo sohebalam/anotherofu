@@ -1,10 +1,10 @@
 import nc from "next-connect"
-const File = require("../../../../models/fileModel")
-import connectDB from "../../../../connectDB"
+const File = require("../../../../../models/fileModel")
+import connectDB from "../../../../../connectDB"
 // import { formidableSave } from "../../../../controllers/fileCont"
-import { fileSave } from "../../../../controllers/lessonCont"
-import onError from "../../../../middlewares/errors"
-import { isAuthenticated, isInstructor } from "../../../../middlewares/auth"
+import { fileSave } from "../../../../../controllers/lessonCont"
+import onError from "../../../../../middlewares/errors"
+import { isAuthenticated, isInstructor } from "../../../../../middlewares/auth"
 connectDB()
 
 export const config = {

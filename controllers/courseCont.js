@@ -19,48 +19,6 @@ const awsConfig = {
 
 const S3 = new AWS.S3(awsConfig)
 
-export const youtube = async (req, res) => {
-  const { slug } = req.query
-
-  try {
-    const YOUTUBE_PLAYLIST_ITEMS_API =
-      "https://www.googleapis.com/youtube/v3/playlistItems"
-
-    const course = await Course.findOne({ slug: slug })
-      .populate("instructor", "_id name")
-      .exec()
-
-    const playlistId = course?.playlistId
-    const response = await fetch(
-      `${YOUTUBE_PLAYLIST_ITEMS_API}?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-    )
-
-    const data = await response?.json()
-
-    const videos = data.items.map((item) => ({
-      playlistId: item.snippet.playlistId,
-      videoId: item.snippet.resourceId.videoId,
-      thumbnailUrl: item.snippet.thumbnails.medium.url,
-      title: item.snippet.title,
-      description: item.snippet.description,
-      channelTitle: item.snippet.channelTitle,
-    }))
-
-    const ytList = await YTList.find()
-
-    if (ytList) {
-      return res.send(ytList[0])
-    }
-
-    const newList = await new YTList({
-      videos: videos,
-    }).save()
-    res.send(newList)
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 export const uploadImage = async (req, res) => {
   console.log(req.method)
 

@@ -30,7 +30,7 @@ import CloseIcon from "@material-ui/icons/Close"
 import ListItem from "@material-ui/core/ListItem"
 import GroupIcon from "@mui/icons-material/Group"
 import CourseForm from "../../../../components/forms/FileForm"
-import FileList from "../../../../components/file/FileList"
+import LessonList from "../../../../components/file/LessonList"
 import VideoList from "../../../../components/videos/VideoList"
 import { useSelector } from "react-redux"
 import { wrapper } from "../../../../redux/store"
@@ -270,7 +270,7 @@ const CourseView = () => {
               </List>
             ))} */}
         </div>
-        <FileList />
+        <LessonList slug={slug} />
         {/* <VideoList /> */}
       </Grid>
     </>

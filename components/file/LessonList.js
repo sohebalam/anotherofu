@@ -19,6 +19,7 @@ const ItemContainer = SortableContainer(({ items }) => (
 
 function App({ slug }) {
   const [extLessons, setExtLessons] = useState([])
+
   useEffect(() => {
     getlessons()
   }, [])
@@ -46,12 +47,10 @@ function App({ slug }) {
   }))
 
   console.log(initalItems)
-
+  const [items, setItems] = useState(initalItems)
   useEffect(() => {
     setItems(initalItems)
-  }, [setItems])
-
-  const [items, setItems] = useState(initalItems)
+  }, [extLessons])
 
   function toggleItemState(item) {
     const updatedItems = items.map((currentItem) => ({
@@ -68,7 +67,30 @@ function App({ slug }) {
   function onSortEnd({ oldIndex, newIndex }) {
     const updatedItems = arrayMove(items, oldIndex, newIndex)
     setItems(updatedItems)
+    console.log("ter", items)
+    postLessons(items)
   }
+
+  const postLessons = async (items) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    try {
+      console.log("ster", items)
+      const { data } = await axios.post(
+        `/api/lessons/${slug}`,
+        { ...items },
+        config
+      )
+
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   console.log(items)
   return (
     <div className="App">

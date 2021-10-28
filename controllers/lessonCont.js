@@ -131,3 +131,20 @@ export const youtube = async (req, res) => {
     console.log(error)
   }
 }
+
+export const lessonOrder = async (req, res) => {
+  // console.log(req.method)
+  console.log(req.body)
+
+  const { slug } = req.query
+
+  const updated = await YTList.findOneAndUpdate(
+    { slug },
+    { lessons: { ...req.body } },
+    {
+      new: true,
+    }
+  ).exec()
+
+  res.json(updated)
+}

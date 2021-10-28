@@ -27,18 +27,40 @@ function App({ slug }) {
   const getlessons = async () => {
     try {
       const { data } = await axios.get(`/api/course/lessons/${slug}`)
-      const [{ files, videos }] = data
+      const [{ files, videos, lessons: dblessons }] = data
 
-      // files.concat(videos)
+      console.log("db", dblessons[0])
 
-      const lessons = [...files, ...videos]
-      setExtLessons(lessons)
+      if (!dblessons) {
+        const lessons = [...files, ...videos]
+        setExtLessons(lessons)
+      }
+
+      const objlessons = dblessons[0]
+
+      // const arrayOfObj = Object.entries(lessons).map((e) => e)
+
+      const lessons = Object.values(objlessons)
+
+      const newlessons = [...lessons]
+
+      console.log(newlessons)
+
+      newlessons.map((lesson) => {
+        console.log(lesson.name)
+      })
+
+      // const newlessons = lessons.map((lesson) => [...lessons])
+
+      // console.log("newlessons", newlessons)
+
+      // setExtLessons(lessons)
     } catch (error) {
       console.log(error)
     }
   }
 
-  console.log(...extLessons)
+  console.log("extlessons", extLessons)
 
   const initalItems = extLessons.map((item) => ({
     name: item.title,
@@ -50,7 +72,7 @@ function App({ slug }) {
   const [items, setItems] = useState(initalItems)
   useEffect(() => {
     setItems(initalItems)
-  }, [extLessons])
+  }, [extLessons, setExtLessons])
 
   function toggleItemState(item) {
     const updatedItems = items.map((currentItem) => ({

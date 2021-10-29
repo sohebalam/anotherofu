@@ -60,6 +60,7 @@ const saveFile = async (file, fields, slug) => {
       slug: slug,
       $addToSet: {
         files: {
+          media: "file",
           title,
           name: file.name,
           description,
@@ -107,6 +108,7 @@ export const youtube = async (req, res) => {
     const data = await response?.json()
 
     const videos = data.items.map((item) => ({
+      media: "video",
       playlistId: item.snippet.playlistId,
       videoId: item.snippet.resourceId.videoId,
       thumbnailUrl: item.snippet.thumbnails.medium.url,
@@ -115,18 +117,22 @@ export const youtube = async (req, res) => {
       channelTitle: item.snippet.channelTitle,
     }))
 
-    const ytList = await YTList.find({})
+    const ytList = await YTList.find({
+      videos: {
+        playlistId: "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa",
+      },
+    })
 
     res.send(ytList)
 
-    if (!ytList) {
-      return await YTList.findOneAndUpdate({
-        slug: slug,
-        $addToSet: {
-          videos: videos,
-        },
-      })
-    }
+    // if (!ytList) {
+    return await YTList.findOneAndUpdate({
+      slug: slug,
+      $addToSet: {
+        videos: videos,
+      },
+    })
+    // }
   } catch (error) {
     console.log(error)
   }
@@ -136,6 +142,10 @@ export const lessonOrder = async (req, res) => {
   const { slug } = req.query
 
   console.log(req.body)
+
+  // console.log(lessons)
+
+  // return
 
   const updated = await YTList.findOneAndUpdate(
     { slug },

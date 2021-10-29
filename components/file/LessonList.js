@@ -12,13 +12,18 @@ const Item = SortableElement(({ value }) => <li>{value}</li>)
 const ItemContainer = SortableContainer(({ items }) => (
   <ul>
     {items.map((item, index) => (
-      <Item key={`item-${item.name}`} index={index} value={item.display} />
+      <Item
+        key={`item-${item.description}`}
+        index={index}
+        value={item.display}
+      />
     ))}
   </ul>
 ))
 
 function App({ slug }) {
   const [extLessons, setExtLessons] = useState([])
+  const [extFiles, setExtFiles] = useState([])
 
   useEffect(() => {
     getlessons()
@@ -29,16 +34,18 @@ function App({ slug }) {
       const { data } = await axios.get(`/api/course/lessons/${slug}`)
       const [{ files, videos, lessons: dblessons }] = data
 
+      // console.log(files, videos)
+
       console.log("db", dblessons[0])
 
       if (!dblessons) {
         const lessons = [...files, ...videos]
+
+        console.log(lessons)
         setExtLessons(lessons)
       }
 
       const objlessons = dblessons[0]
-
-      // const arrayOfObj = Object.entries(lessons).map((e) => e)
 
       const lessons = Object.values(objlessons)
 
@@ -47,14 +54,10 @@ function App({ slug }) {
       console.log(newlessons)
 
       newlessons.map((lesson) => {
-        console.log(lesson.name)
+        console.log(lesson.title)
       })
 
-      // const newlessons = lessons.map((lesson) => [...lessons])
-
-      // console.log("newlessons", newlessons)
-
-      // setExtLessons(lessons)
+      setExtLessons(lessons)
     } catch (error) {
       console.log(error)
     }
@@ -62,17 +65,28 @@ function App({ slug }) {
 
   console.log("extlessons", extLessons)
 
+  //initalItems
+
   const initalItems = extLessons.map((item) => ({
-    name: item.title,
+    description: item.description || undefined,
+    title: item.title,
     display: item.title,
     selected: false,
+    playlistId: item.playlistId || undefined,
+    file_path: item.file_path || undefined,
+    file_mimetype: item.file_mimetype || undefined,
+    thumbnailUrl: item.thumbnailUrl || undefined,
+    videoId: item.videoId || undefined,
+    channelTitle: item.channelTitle || undefined,
+    name: item.name || item.title,
+    media: item.media || undefined,
   }))
 
   console.log(initalItems)
   const [items, setItems] = useState(initalItems)
   useEffect(() => {
     setItems(initalItems)
-  }, [extLessons, setExtLessons])
+  }, [extLessons, setExtLessons, setItems])
 
   function toggleItemState(item) {
     const updatedItems = items.map((currentItem) => ({
@@ -94,6 +108,7 @@ function App({ slug }) {
   }
 
   const postLessons = async (items) => {
+    console.log("itemssds", items)
     const config = {
       headers: {
         "Content-Type": "application/json",

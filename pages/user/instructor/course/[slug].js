@@ -35,6 +35,7 @@ import VideoList from "../../../../components/videos/VideoList"
 import { useSelector } from "react-redux"
 import { wrapper } from "../../../../redux/store"
 import { getSingleCourse } from "../../../../redux/actions/lessonActions"
+import Lessons from "../../../../components/file/DND"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -79,14 +80,6 @@ const CourseView = () => {
   const { loading, error: courseError, course } = singleCourse
 
   console.log(course)
-
-  // useEffect(() => {
-  //   loadCourse()
-  // }, [slug])
-  // const loadCourse = async () => {
-  //   const { data } = await axios.get(`/api/course/${slug}`)
-  //   setCourse(data)
-  // }
 
   useEffect(() => {
     course && studentCount()
@@ -136,7 +129,6 @@ const CourseView = () => {
     <>
       <Grid container>
         <>
-          {/* <pre>{JSON.stringify(course, null, 4)}</pre> */}
           {course && (
             <Grid container key={course._id} style={{ marginTop: "2rem" }}>
               <Grid container>
@@ -159,18 +151,6 @@ const CourseView = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={4}>
-                  {/* <Box mt="1rem">
-                    <Button
-                      variant="outlined"
-                      fullWidth={true}
-                      color="primary"
-                      icon={<PublishIcon />}
-                      size="large"
-                      onClick={() => setVisible(true)}
-                    >
-                      Add Video
-                    </Button>
-                  </Box> */}
                   <Box mt="1rem">
                     <Button
                       variant="outlined"
@@ -256,22 +236,8 @@ const CourseView = () => {
         </>
       </Grid>
       <Grid container>
-        <div>
-          {/* <h4>{course && course.lessons && course.lessons.length} Lessons</h4> */}
-          {/* {course &&
-            course.lessons?.map((lesson, index) => (
-              <List key={lesson._id}>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar className={classes.avcolor}>{index + 1}</Avatar>
-                  </ListItemAvatar>
-                  {lesson.title}
-                </ListItem>
-              </List>
-            ))} */}
-        </div>
         <LessonList slug={slug} />
-        {/* <VideoList /> */}
+        <Lessons slug={slug} />
       </Grid>
     </>
   )

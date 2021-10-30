@@ -125,14 +125,14 @@ export const youtube = async (req, res) => {
 
     res.send(ytList)
 
-    // if (!ytList) {
-    return await YTList.findOneAndUpdate({
-      slug: slug,
-      $addToSet: {
-        videos: videos,
-      },
-    })
-    // }
+    if (!ytList) {
+      return await YTList.findOneAndUpdate({
+        slug: slug,
+        $addToSet: {
+          videos: videos,
+        },
+      })
+    }
   } catch (error) {
     console.log(error)
   }

@@ -17,14 +17,14 @@ const DragList = ({ slug }) => {
 
       console.log("dblessons", dblessons)
 
-      if (dblessons.lessons?.length !== 0) {
+      if (dblessons.length !== 0) {
         const lessons = [...files, ...videos]
 
         console.log(lessons)
         setData(lessons)
         // setExtLessons(lessons)
       }
-      if (dblessons.lessons?.length > 0) {
+      if (dblessons.length > 0) {
         setData(dblessons)
       }
 
@@ -87,19 +87,23 @@ const DragList = ({ slug }) => {
       <Droppable droppableId="123456">
         {(provided, snapshot) => (
           <div ref={provided.innerRef}>
-            {data.map((item, index) => (
-              <Draggable draggableId={item._id} key={item._id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <div>{item.title}</div>
-                  </div>
-                )}
-              </Draggable>
-            ))}
+            {!data ? (
+              <Circularprogress />
+            ) : (
+              data.map((item, index) => (
+                <Draggable draggableId={item._id} key={item._id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <div>{item.title}</div>
+                    </div>
+                  )}
+                </Draggable>
+              ))
+            )}
             {provided.placeholder}
           </div>
         )}

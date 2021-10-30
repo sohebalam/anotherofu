@@ -123,8 +123,9 @@ export const youtube = async (req, res) => {
       },
     })
 
+    // if (ytList.videos) {
     res.send(ytList)
-
+    // }
     if (!ytList) {
       return await YTList.findOneAndUpdate({
         slug: slug,

@@ -3,6 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import axios from "axios"
 
 const DragList = ({ slug }) => {
+  const [data, setData] = useState([])
   useEffect(() => {
     getlessons()
   }, [setData])
@@ -16,14 +17,17 @@ const DragList = ({ slug }) => {
 
       console.log("dblessons", dblessons)
 
-      if (!dblessons.media === "lesson") {
+      if (dblessons.lessons?.length !== 0) {
         const lessons = [...files, ...videos]
 
         console.log(lessons)
         setData(lessons)
         // setExtLessons(lessons)
       }
-      setData(dblessons)
+      if (dblessons.lessons?.length > 0) {
+        setData(dblessons)
+      }
+
       // const objlessons = dblessons[0]
 
       // const lessons = Object.values(objlessons)
@@ -41,8 +45,6 @@ const DragList = ({ slug }) => {
       console.log(error)
     }
   }
-
-  const [data, setData] = useState([])
 
   console.log(data)
 

@@ -117,13 +117,17 @@ export const youtube = async (req, res) => {
       channelTitle: item.snippet.channelTitle,
     }))
 
-    const ytCount = await YTList.find({
-      videos: {
-        playlistId: "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa",
-      },
-    }).count()
+    // const ytCount = await YTList.find({
+    //   videos: { $exists: true, $size: 0 },
+    // }).countDocuments()
 
-    if (ytCount !== 0) {
+    const ytCount = await YTList.find()
+
+    console.log(ytCount[0]?.videos.length)
+
+    // ytCount[0]?.videos[0].playlistId = course.playlistId
+
+    if (ytCount[0]?.videos.length < 1) {
       return await YTList.findOneAndUpdate({
         slug: slug,
         $addToSet: {
@@ -131,12 +135,13 @@ export const youtube = async (req, res) => {
         },
       })
     }
-    // console.log(course.playlistId)
+
     const ytList = await YTList.find({
       videos: {
-        playlistId: course.playlistId,
+        playlistId: course.playlistId.toString(),
       },
     })
+
     res.send(ytList)
   } catch (error) {
     console.log(error)

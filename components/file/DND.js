@@ -24,7 +24,6 @@ const DragList = ({ slug }) => {
 
       console.log(lessons)
       setData(lessons)
-      // setExtLessons(lessons)
       // }
       if (dblessons.length > 0) {
         setData(dblessons)

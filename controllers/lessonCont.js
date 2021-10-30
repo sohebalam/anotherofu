@@ -117,16 +117,13 @@ export const youtube = async (req, res) => {
       channelTitle: item.snippet.channelTitle,
     }))
 
-    const ytList = await YTList.find({
+    const ytCount = await YTList.find({
       videos: {
         playlistId: "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa",
       },
-    })
+    }).count()
 
-    // if (ytList.videos) {
-    res.send(ytList)
-    // }
-    if (!ytList) {
+    if (ytCount !== 0) {
       return await YTList.findOneAndUpdate({
         slug: slug,
         $addToSet: {
@@ -134,6 +131,13 @@ export const youtube = async (req, res) => {
         },
       })
     }
+
+    const ytList = await YTList.find({
+      videos: {
+        playlistId: "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa",
+      },
+    })
+    res.send(ytList)
   } catch (error) {
     console.log(error)
   }

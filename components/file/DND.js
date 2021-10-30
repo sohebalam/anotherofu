@@ -17,7 +17,7 @@ const DragList = ({ slug }) => {
 
       console.log("dblessons", dblessons)
 
-      if (dblessons.length !== 0) {
+      if (dblessons.length === 0) {
         const lessons = [...files, ...videos]
 
         console.log(lessons)

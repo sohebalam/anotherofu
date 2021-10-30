@@ -1,20 +1,11 @@
 import { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import axios from "axios"
-// const data = [
-//   { id: "1", name: "Prepare 2019 Financial" },
-//   { id: "2", name: "Prepare 2019 Marketing Plan" },
-//   { id: "3", name: "Update Personnel Files" },
-//   {
-//     id: "4",
-//     name: "Review Health Insurance Options Under the Affordable Care Act",
-//   },
-// ]
 
 const DragList = ({ slug }) => {
   useEffect(() => {
     getlessons()
-  }, [])
+  }, [setData])
 
   const getlessons = async () => {
     try {
@@ -23,14 +14,16 @@ const DragList = ({ slug }) => {
 
       console.log(files, videos)
 
-      // if (!dblessons) {
-      const lessons = [...files, ...videos]
+      console.log("dblessons", dblessons)
 
-      console.log(lessons)
-      setData(lessons)
-      // setExtLessons(lessons)
-      // }
+      if (!dblessons.media === "lesson") {
+        const lessons = [...files, ...videos]
 
+        console.log(lessons)
+        setData(lessons)
+        // setExtLessons(lessons)
+      }
+      setData(dblessons)
       // const objlessons = dblessons[0]
 
       // const lessons = Object.values(objlessons)
@@ -53,17 +46,34 @@ const DragList = ({ slug }) => {
 
   console.log(data)
 
-  // const [list, setList] = useState(data)
-
-  // console.log(list)
-
   const reorder = (data, startIndex, endIndex) => {
     const result = Array.from(data)
     const [removed] = result.splice(startIndex, 1)
 
     result.splice(endIndex, 0, removed)
-    console.log(result)
+    postLessons(result)
     return result
+  }
+
+  const postLessons = async (items) => {
+    console.log("itemssds", items)
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+    try {
+      console.log("ster", items)
+      const { data } = await axios.post(
+        `/api/lessons/${slug}`,
+        { ...items },
+        config
+      )
+
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const onEnd = async (result) => {

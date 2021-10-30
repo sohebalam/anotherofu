@@ -236,7 +236,7 @@ const CourseView = () => {
         </>
       </Grid>
       <Grid container>
-        <LessonList slug={slug} />
+        {/* <LessonList slug={slug} /> */}
         <Lessons slug={slug} />
       </Grid>
     </>

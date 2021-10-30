@@ -47,7 +47,7 @@
     "mocha": "^9.1.2",
     "mongoose": "^6.0.1",
     "nanoid": "^3.1.25",
-    "next": "11.1.0",
+    "next": "^12.0.1",
     "next-absolute-url": "^1.2.2",
     "next-auth": "^3.29.0",
     "next-connect": "^0.10.2",

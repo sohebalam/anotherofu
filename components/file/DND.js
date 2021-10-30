@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import axios from "axios"
+import { Card, CircularProgress } from "@material-ui/core"
+import { Box } from "@mui/system"
 
 const DragList = ({ slug }) => {
   const [data, setData] = useState([])
@@ -17,15 +19,19 @@ const DragList = ({ slug }) => {
 
       console.log("dblessons", dblessons)
 
-      if (dblessons.length === 0) {
-        const lessons = [...files, ...videos]
+      // if (dblessons.length === 0) {
+      const lessons = [...files, ...videos]
 
-        console.log(lessons)
-        setData(lessons)
-        // setExtLessons(lessons)
-      }
+      console.log(lessons)
+      setData(lessons)
+      // setExtLessons(lessons)
+      // }
       if (dblessons.length > 0) {
         setData(dblessons)
+      }
+
+      if (lessons.length > dblessons.length) {
+        setData(lessons)
       }
 
       // const objlessons = dblessons[0]
@@ -88,7 +94,7 @@ const DragList = ({ slug }) => {
         {(provided, snapshot) => (
           <div ref={provided.innerRef}>
             {!data ? (
-              <Circularprogress />
+              <CircularProgress />
             ) : (
               data.map((item, index) => (
                 <Draggable draggableId={item._id} key={item._id} index={index}>
@@ -98,7 +104,13 @@ const DragList = ({ slug }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <div>{item.title}</div>
+                      <div>
+                        <Box style={{ marginTop: "0.25rem" }}>
+                          <Card style={{ padding: "0.25rem" }}>
+                            {item.title}
+                          </Card>
+                        </Box>
+                      </div>
                     </div>
                   )}
                 </Draggable>

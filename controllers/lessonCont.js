@@ -131,10 +131,10 @@ export const youtube = async (req, res) => {
         },
       })
     }
-
+    // console.log(course.playlistId)
     const ytList = await YTList.find({
       videos: {
-        playlistId: "PL25nRqESo6qH6t-8NcPRE20XSThI2JgTa",
+        playlistId: course.playlistId,
       },
     })
     res.send(ytList)

@@ -3,84 +3,50 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import axios from "axios"
 import { Card, CircularProgress } from "@material-ui/core"
 import { Box } from "@mui/system"
+import { wrapper } from "../../redux/store"
+import { useSelector, useDispatch } from "react-redux"
+import { postLessons } from "../../redux/actions/lessonActions"
 
 const DragList = ({ slug }) => {
   const [data, setData] = useState([])
+  const dispatch = useDispatch()
+  // useEffect(() => {
+  //   getlessons()
+  // }, [setData])
+
+  const lessonsList = useSelector((state) => state.lessonsList)
+  const { loading, error, lessons } = lessonsList
+
+  var lessonsArr = lessons[0]
+
+  console.log(lessonsArr)
+
+  const { files, videos, lessons: dblessons } = lessonsArr
+
+  console.log(videos)
+
+  console.log("dblessons", dblessons)
+
+  // if (dblessons.length === 0) {
+  const listLessons = [...files, ...videos]
+
   useEffect(() => {
-    getlessons()
-  }, [setData])
-
-  const getlessons = async () => {
-    try {
-      const { data } = await axios.get(`/api/course/lessons/${slug}`)
-      const [{ files, videos, lessons: dblessons }] = data
-
-      console.log(files, videos)
-
-      console.log("dblessons", dblessons)
-
-      // if (dblessons.length === 0) {
-      const lessons = [...files, ...videos]
-
-      console.log(lessons)
-      setData(lessons)
-      // }
-      if (dblessons.length > 0) {
-        setData(dblessons)
-      }
-
-      if (lessons.length > dblessons.length) {
-        setData(lessons)
-      }
-
-      // const objlessons = dblessons[0]
-
-      // const lessons = Object.values(objlessons)
-
-      // const newlessons = [...lessons]
-
-      // console.log(newlessons)
-
-      // newlessons.map((lesson) => {
-      //   console.log(lesson.title)
-      // })
-
-      // setExtLessons(lessons)
-    } catch (error) {
-      console.log(error)
+    if (dblessons.length > 0) {
+      setData(dblessons)
     }
-  }
 
-  console.log(data)
+    if (listLessons.length > dblessons.length) {
+      setData(listLessons)
+    }
+  }, [dblessons])
 
   const reorder = (data, startIndex, endIndex) => {
     const result = Array.from(data)
     const [removed] = result.splice(startIndex, 1)
 
     result.splice(endIndex, 0, removed)
-    postLessons(result)
+    dispatch(postLessons(result, slug))
     return result
-  }
-
-  const postLessons = async (items) => {
-    console.log("itemssds", items)
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-    try {
-      console.log("ster", items)
-      const { data } = await axios.post(
-        `/api/lessons/${slug}`,
-        { ...items },
-        config
-      )
-
-      console.log(data)
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   const onEnd = async (result) => {

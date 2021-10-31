@@ -9,6 +9,8 @@ import {
   deleteImageReducer,
   enrollmentCheckReducer,
   freeEnrollReducer,
+  lessonsListReducer,
+  lessonsPostReducer,
   paidEnrollReducer,
   selectVideoReducer,
   singleCourseReducer,
@@ -47,6 +49,8 @@ const reducer = combineReducers({
   enrollmentCheck: enrollmentCheckReducer,
   freeEnroll: freeEnrollReducer,
   courseEdit: courseEditReducer,
+  lessonsList: lessonsListReducer,
+  lessonsPost: lessonsPostReducer,
 
   //files
   fileGet: fileGetReducer,

@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react"
 import { useRouter } from "next/router"
-import InstructorRoute from "../../../../components/route/Instructor"
 import axios from "axios"
 import {
   Avatar,
   Tooltip,
   Button,
-  List,
   Grid,
   Box,
   makeStyles,
   DialogActions,
   IconButton,
-  ListItemAvatar,
-  Snackbar,
   Alert,
   Typography,
 } from "@material-ui/core"
-import Item from "@material-ui/icons"
 import ReactMarkdown from "react-markdown"
 import { CheckCircleOutline } from "@material-ui/icons"
 import EditIcon from "@material-ui/icons/Edit"
@@ -25,16 +20,16 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff"
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline"
 import PublishIcon from "@material-ui/icons/Publish"
 import Dialog from "@material-ui/core/Dialog"
-import AddLesson from "../../../../components/forms/AddLesson"
 import CloseIcon from "@material-ui/icons/Close"
-import ListItem from "@material-ui/core/ListItem"
 import GroupIcon from "@mui/icons-material/Group"
 import CourseForm from "../../../../components/forms/FileForm"
-import VideoList from "../../../../components/videos/VideoList"
 import { useSelector } from "react-redux"
 import { wrapper } from "../../../../redux/store"
-import { getSingleCourse } from "../../../../redux/actions/lessonActions"
-import Lessons from "../../../../components/file/DND"
+import {
+  getlessons,
+  getSingleCourse,
+} from "../../../../redux/actions/lessonActions"
+import Lessons from "../../../../components/file/DragList"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -245,12 +240,21 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const { params, req } = context
 
-    // console.log("params", params)
+    const { slug } = params
 
     // const slug = "fdzsf"
 
-    await store.dispatch(getSingleCourse(req, params.slug))
+    await store.dispatch(getSingleCourse(req.headers.cookie, req, params.slug))
+    await store.dispatch(getlessons(req.headers.cookie, req, slug))
   }
 )
 
 export default CourseView
+
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store) => async (context) => {
+//     const { params, req } = context
+
+//     await store.dispatch(getLessons(params.slug))
+//   }
+// )

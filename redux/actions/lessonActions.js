@@ -11,6 +11,9 @@ import {
   FREE_ENROLL_FAIL,
   FREE_ENROLL_REQUEST,
   FREE_ENROLL_SUCCESS,
+  GET_LESSONS_FAIL,
+  GET_LESSONS_REQUEST,
+  GET_LESSONS_SUCCESS,
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
@@ -20,6 +23,9 @@ import {
   PAID_ENROLL_FAIL,
   PAID_ENROLL_REQUEST,
   PAID_ENROLL_SUCCESS,
+  POST_LESSONS_FAIL,
+  POST_LESSONS_REQUEST,
+  POST_LESSONS_SUCCESS,
   PUBLISHED_COURSES_FAIL,
   PUBLISHED_COURSES_REQUEST,
   PUBLISHED_COURSES_SUCCESS,
@@ -37,6 +43,71 @@ import absoluteUrl from "next-absolute-url"
 import { loadStripe } from "@stripe/stripe-js"
 
 import axios from "axios"
+
+export const postLessons = (items, slug) => async (dispatch) => {
+  try {
+    dispatch({ type: POST_LESSONS_REQUEST })
+
+    console.log("itemssds", items)
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+
+    console.log("ster", items)
+    const { data } = await axios.post(
+      `/api/lessons/${slug}`,
+      { ...items },
+      config
+    )
+
+    dispatch({
+      type: POST_LESSONS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: POST_LESSONS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const getlessons = (authCookie, req, slug) => async (dispatch) => {
+  console.log(slug)
+  try {
+    dispatch({ type: GET_LESSONS_REQUEST })
+
+    const config = {
+      headers: {
+        cookie: authCookie,
+      },
+    }
+
+    const { origin } = absoluteUrl(req)
+
+    const { data } = await axios.get(
+      `${origin}/api/course/lessons/${slug}`,
+      config
+    )
+    dispatch({
+      type: GET_LESSONS_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: GET_LESSONS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
 
 export const courseEdit = (image, values, slug) => async (dispatch) => {
   try {
@@ -138,16 +209,22 @@ export const paidEnroll = (course) => async (dispatch) => {
   }
 }
 
-export const getSingleCourse = (req, slug) => async (dispatch) => {
+export const getSingleCourse = (authCookie, req, slug) => async (dispatch) => {
   try {
     dispatch({ type: SINGLE_COURSE_REQUEST })
 
-    // console.log(req)
-    console.log(slug)
+    const config = {
+      headers: {
+        cookie: authCookie,
+      },
+    }
 
     const { origin } = absoluteUrl(req)
 
-    const { data } = await axios.get(`${origin}/api/course/single/${slug}`)
+    const { data } = await axios.get(
+      `${origin}/api/course/single/${slug}`,
+      config
+    )
 
     console.log(data)
 

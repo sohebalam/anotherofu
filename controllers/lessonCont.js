@@ -54,7 +54,7 @@ const saveFile = async (file, fields, slug) => {
   await fs.unlinkSync(file.path)
 
   try {
-    console.log(file.path, file.type, title, description)
+    // console.log(file.path, file.type, title, description)
 
     return await YTList.findOneAndUpdate({
       slug: slug,
@@ -117,15 +117,7 @@ export const youtube = async (req, res) => {
       channelTitle: item.snippet.channelTitle,
     }))
 
-    // const ytCount = await YTList.find({
-    //   videos: { $exists: true, $size: 0 },
-    // }).countDocuments()
-
     const ytCount = await YTList.find()
-
-    console.log(ytCount[0]?.videos.length)
-
-    // ytCount[0]?.videos[0].playlistId = course.playlistId
 
     if (ytCount[0]?.videos.length < 1) {
       return await YTList.findOneAndUpdate({
@@ -151,8 +143,6 @@ export const youtube = async (req, res) => {
 export const lessonOrder = async (req, res) => {
   const { slug } = req.query
 
-  console.log(req.body)
-
   const nonObjlessons = Object.values(req.body)
 
   const lessons = nonObjlessons.map((item) => ({
@@ -167,7 +157,7 @@ export const lessonOrder = async (req, res) => {
     file_mimetype: item.file_mimetype || "",
     name: item.name || "",
   }))
-  console.log(lessons)
+  // console.log(lessons)
 
   const updated = await YTList.findOneAndUpdate(
     { slug },

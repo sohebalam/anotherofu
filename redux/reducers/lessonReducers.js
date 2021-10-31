@@ -11,6 +11,9 @@ import {
   EDIT_COURSE_FAIL,
   EDIT_COURSE_REQUEST,
   EDIT_COURSE_SUCCESS,
+  GET_LESSONS_FAIL,
+  GET_LESSONS_REQUEST,
+  GET_LESSONS_SUCCESS,
   LOAD_COURSES_FAIL,
   LOAD_COURSES_REQUEST,
   LOAD_COURSES_SUCCESS,
@@ -20,6 +23,9 @@ import {
   PAID_ENROLL_FAIL,
   PAID_ENROLL_REQUEST,
   PAID_ENROLL_SUCCESS,
+  POST_LESSONS_FAIL,
+  POST_LESSONS_REQUEST,
+  POST_LESSONS_SUCCESS,
   PUBLISHED_COURSES_FAIL,
   PUBLISHED_COURSES_REQUEST,
   PUBLISHED_COURSES_SUCCESS,
@@ -33,6 +39,38 @@ import {
   UPLOAD_IMAGE_REQUEST,
   UPLOAD_IMAGE_SUCCESS,
 } from "../constants/lessonTypes"
+
+export const lessonsPostReducer = (
+  state = { loading: false, dblessons: null },
+  action
+) => {
+  switch (action.type) {
+    case POST_LESSONS_REQUEST:
+      return { loading: true }
+    case POST_LESSONS_SUCCESS:
+      return { loading: false, dblessons: action.payload }
+    case POST_LESSONS_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const lessonsListReducer = (
+  state = { loading: false, lessons: null },
+  action
+) => {
+  switch (action.type) {
+    case GET_LESSONS_REQUEST:
+      return { loading: true }
+    case GET_LESSONS_SUCCESS:
+      return { loading: false, lessons: action.payload }
+    case GET_LESSONS_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
 
 export const courseEditReducer = (
   state = { loading: false, course: null },

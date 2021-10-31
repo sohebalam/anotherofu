@@ -12,5 +12,6 @@ connectDB()
 // console.log("here")
 
 router.use(isAuthenticated, isInstructor).get(getFiles)
+// router.get(getFiles)
 
 export default router

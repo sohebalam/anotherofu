@@ -10,22 +10,11 @@ import { postLessons } from "../../redux/actions/lessonActions"
 const DragList = ({ slug }) => {
   const [data, setData] = useState([])
   const dispatch = useDispatch()
-  // useEffect(() => {
-  //   getlessons()
-  // }, [setData])
 
   const lessonsList = useSelector((state) => state.lessonsList)
   const { loading, error, lessons } = lessonsList
 
-  var lessonsArr = lessons[0]
-
-  console.log(lessonsArr)
-
-  const { files, videos, lessons: dblessons } = lessonsArr
-
-  console.log(videos)
-
-  console.log("dblessons", dblessons)
+  const { files, videos, lessons: dblessons } = lessons
 
   // if (dblessons.length === 0) {
   const listLessons = [...files, ...videos]

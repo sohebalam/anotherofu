@@ -94,9 +94,12 @@ export const getlessons = (authCookie, req, slug) => async (dispatch) => {
       `${origin}/api/course/lessons/${slug}`,
       config
     )
+
+    console.log("actio", data[0])
+
     dispatch({
       type: GET_LESSONS_SUCCESS,
-      payload: data,
+      payload: data[0],
     })
   } catch (error) {
     dispatch({
